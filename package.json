@@ -1,0 +1,43 @@
+{
+  "name": "openblog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-navigation-menu": "^1.2.1",
+    "@radix-ui/react-popover": "^1.1.2",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@types/node": "22.9.1",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "eslint": "9.15.0",
+    "eslint-config-next": "15.0.3",
+    "fuse.js": "^7.0.0",
+    "lucide-react": "^0.460.0",
+    "next": "15.0.3",
+    "openblog": "file:",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.6.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.20",
+    "next-themes": "^0.4.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15"
+  },
+  "packageManager": "pnpm@9.14.4+sha256.26a726b633b629a3fabda006f696ae4260954a3632c8054112d7ae89779e5f9a"
+}

@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f8f9fa; /* Blanc cassé pour un fond doux */
+    --foreground: 210 10% 10%; /* Texte sombre presque noir */
+    --card: #f2f2f2; /* Cartes légèrement colorées en gris clair */
+    --card-foreground: 210 10% 20%; /* Texte des cartes en gris foncé */
+    --primary: 30 100% 60%; /* Orange moderne, ni trop clair ni trop saturé */
+    --primary-foreground: 0 0% 100%; /* Blanc pur pour le texte sur les éléments orange */
+    --secondary: 45 50% 80%; /* Orange doux et apaisant pour les éléments secondaires */
+    --secondary-foreground: 210 10% 15%; /* Texte sombre pour les éléments secondaires */
+    --muted: 220 10% 85%; /* Gris pâle pour les éléments discrets */
+    --muted-foreground: 220 10% 40%; /* Texte gris clair */
+    --accent: 35 100% 45%; /* Accents orange avec un ton moderne et vif */
+    --accent-foreground: 0 0% 100%; /* Texte blanc pour l'accent */
+    --destructive: 0 100% 50%; /* Rouge vif pour les alertes */
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 10% 80%; /* Bordure légère pour séparer les éléments */
+    --input: 210 10% 90%; /* Couleur claire pour les champs d'entrée */
+    --ring: 30 100% 40%; /* Anneau orange moderne */
+    --radius: 0.625rem; /* Bords arrondis élégants */
+  }
+
+  .dark {
+    --background: 210 20% 10%; /* Fond sombre, proche du noir mais avec une touche bleutée */
+    --foreground: 30 100% 95%; /* Texte clair en mode sombre, presque blanc cassé */
+    --card: 210 15% 12%; /* Cartes sombres avec un léger bleu profond */
+    --card-foreground: 30 100% 80%; /* Texte clair sur fond sombre */
+    --primary: 25 100% 55%; /* Un orange profond et saturé pour l’accent en mode sombre */
+    --primary-foreground: 0 0% 100%; /* Texte blanc pour le contraste */
+    --secondary: 30 100% 50%; /* Un orange plus vif mais toujours moderne */
+    --secondary-foreground: 0 0% 100%; /* Texte blanc sur éléments secondaires */
+    --muted: 210 10% 20%; /* Gris foncé mais agréable pour les éléments moins importants */
+    --muted-foreground: 220 10% 70%; /* Texte léger pour les éléments discrets */
+    --accent: 35 100% 45%; /* Accents orange saturé pour ressortir */
+    --accent-foreground: 0 0% 100%; /* Texte clair sur les accents */
+    --destructive: 0 100% 45%; /* Rouge vif pour l'alerte */
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 10% 30%; /* Bordures sombres pour séparer les éléments */
+    --input: 210 10% 25%; /* Champs d'entrée sombres mais lisibles */
+    --ring: 25 100% 50%; /* Anneau orange vif en mode sombre */
+    --radius: 0.625rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif; /* Police moderne et épurée */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background: var(--background);
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.02) 1%, transparent 1%);
+    background-size: 5px 5px; /* Taille des grains */
+  }
+
+  h1 {
+    @apply text-primary font-extrabold text-4xl tracking-tight;
+    font-family: 'Merriweather', serif; /* Titre avec une touche "blog" */
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    @apply text-primary font-semibold text-3xl;
+    font-family: 'Lora', serif; /* Second niveau de titres élégant */
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    @apply text-primary font-medium text-2xl;
+    font-family: 'Roboto Slab', serif;
+    margin-bottom: 0.75rem;
+  }
+
+  h4, h5, h6 {
+    @apply text-primary font-normal;
+    font-family: 'Inter', sans-serif;
+  }
+
+  p {
+    @apply text-muted-foreground leading-relaxed;
+    margin-bottom: 1rem;
+  }
+}
