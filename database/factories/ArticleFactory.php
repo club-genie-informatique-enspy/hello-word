@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
         return [
             'user_id' => fake()->randomElement($user_id),
             'article_uuid' => (string)Str::uuid(),
-            'image' => fake()->word(),
+            'image' => 'https://picsum.photos/640/480?random=' . fake()->numberBetween(1, 1000),
             'contenu' => fake()->sentence(),
             'titre' => fake()->word(),
             'slug' => fake()->unique()->slug(),

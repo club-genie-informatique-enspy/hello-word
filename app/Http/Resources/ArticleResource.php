@@ -23,7 +23,10 @@ class ArticleResource extends JsonResource
             'source' => $this->source,
             'nb_vues' => $this->nb_vues,
             'likes' => $this->likes,
-            'slug' => $this->slug
+            'slug' => $this->slug,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+
         ];
     }
 }

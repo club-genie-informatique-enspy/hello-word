@@ -19,6 +19,8 @@ class CommentaireResource extends JsonResource
             'article_uuid' => $this->article_uuid,
             'user_id' => $this->user_id,
             'contenu' => $this->contenu,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }
