@@ -22,9 +22,9 @@ class CommentaireController extends Controller
         return new CommentaireResource($model);
     }
 
-    public function show(string $article_uuid)
+    public function show(string $uuid)
     {
-        return new CommentaireResource(Article::findByUuid($article_uuid)->commentaires());
+        return new CommentaireResource(Commentaire::findByUuid($uuid));
     }
 
     public function update(CommentaireRequest $request, string $article_uuid, string $uuid)
