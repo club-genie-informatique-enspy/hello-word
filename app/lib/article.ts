@@ -3,29 +3,16 @@ import { Article } from "@/type";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
-async function fetchAPI(endpoint: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+import { fetchAPI } from "./api";         
 
-  const fullURL = `${API_BASE_URL}${endpoint}`;
-  console.log("URL API:", fullURL);
-
-  if (!response.ok) {
-    throw new Error(`API call failed: ${response.statusText}`);
-  }
-
-  return response.json();
-}
 
 export async function getAllArticles(): Promise<Article[]> {
   // Route mise à jour pour lister tous les articles
   return fetchAPI('/article');
 }
+
+
+
 
 export async function getArticle(uuid: string): Promise<Article> {
   // Route mise à jour pour obtenir un article spécifique par uuid
@@ -52,8 +39,8 @@ export async function getAuthors(): Promise<{ slug: string; name: string; }[]> {
 }
 
 export async function createArticle(articleData: Omit<Article, 'article_uuid'>): Promise<Article> {
-  // Route mise à jour pour créer un article
-  return fetchAPI('/article', {
+  // Route pour la création d'un article
+  return fetchAPI('/articles', {
     method: 'POST',
     body: JSON.stringify(articleData),
   });
@@ -62,10 +49,13 @@ export async function createArticle(articleData: Omit<Article, 'article_uuid'>):
 export async function updateArticle(uuid: string, articleData: Partial<Article>): Promise<Article> {
   // Route mise à jour pour mettre à jour un article
   return fetchAPI(`/article/${uuid}`, {
+    mode: 'cors',
     method: 'PUT',
     body: JSON.stringify(articleData),
   });
 }
+
+
 
 export async function deleteArticle(uuid: string): Promise<void> {
   // Route mise à jour pour supprimer un article

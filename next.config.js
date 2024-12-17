@@ -1,5 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.js
+const { resolve } = require('path');
+
+module.exports = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -12,7 +14,18 @@ const nextConfig = {
         hostname: 'flowbite.com',
       },
     ],
+    domains: ['picsum.photos'],
   },
-}
-
-module.exports = nextConfig
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        net: false,
+        tls: false,
+        fs: false,
+      };
+      config.resolve.modules.push(resolve('./node_modules'));
+    }
+    return config;
+  },
+};

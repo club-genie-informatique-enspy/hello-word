@@ -55,6 +55,8 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif; /* Police moderne et épurée */
     transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 9px;
+    padding-right: 9px;
     background: var(--background);
     background-image: radial-gradient(circle, rgba(0, 0, 0, 0.02) 1%, transparent 1%);
     background-size: 5px 5px; /* Taille des grains */

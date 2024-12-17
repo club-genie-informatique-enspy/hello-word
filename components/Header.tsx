@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "next-themes";
-import { Lock, LogOut, UserPlus, LogIn } from "lucide-react"
+import { Lock, LogOut, UserPlus, LogIn, Shield } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useAuth } from "@/app/provider/auth-provider"
 import {
@@ -18,10 +18,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function Header() {
+
   const { user, logout } = useAuth()
   const router = useRouter()
   const { theme } = useTheme();
   const logoSrc = theme === "dark" ? "/images/logo-dark-2.png" : "/images/logo-light-2.png";
+
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
 
   const handleLogout = () => {
     logout()
@@ -48,7 +57,10 @@ export function Header() {
           </div>
         </Link>
         <div className="flex flex-row flex-wrap items-center gap-2">
-          {user ? (
+
+          {user ?
+          
+          (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -85,6 +97,13 @@ export function Header() {
                   <Link href="/login" className="cursor-pointer">
                     <LogIn className="mr-2 h-4 w-4" />
                     Connexion
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/admin" className="cursor-pointer">
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
