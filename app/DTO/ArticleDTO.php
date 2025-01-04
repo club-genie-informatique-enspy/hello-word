@@ -10,12 +10,12 @@ readonly class ArticleDTO
 
     public function __construct(
         public? string $image,
- public? string $content,
- public? string $auteur,
- public? string $source,
- public? int $nbVue,
- public? int $likes,
- public? string $uuid,
+        public? string $content,
+        public? string $auteur,
+        public? string $source,
+        public? int $nbVue,
+        public? int $likes,
+        public? string $uuid,
 
     ) {}
 
@@ -23,12 +23,12 @@ readonly class ArticleDTO
     {
         return new self(
             image : $request->get('image'),
- content : $request->get('content'),
- auteur : $request->get('auteur'),
- source : $request->get('source'),
- nbVue : $request->get('nbVue'),
- likes : $request->get('likes'),
- uuid : $request->get('uuid'),
+            content : $request->get('content'),
+            auteur : $request->get('auteur'),
+            source : $request->get('source'),
+            nbVue : $request->get('nbVue'),
+            likes : $request->get('likes'),
+            uuid : $request->get('uuid'),
 
         );
     }

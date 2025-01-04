@@ -13,5 +13,17 @@ Route::get('/user', function (Request $request) {
 
 
 Route::apiResource('article', ArticleController::class);
+
+
 Route::apiResource('commentaire', CommentaireController::class)->only(['index','show','destroy','update']);
+
+
+
+
 Route::post('commentaire/{article_uuid}/', [CommentaireController::class, 'store']);
+
+
+
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
