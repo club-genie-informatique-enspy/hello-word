@@ -17,6 +17,12 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request): ArticleResource
     {
         $validated = $request->validated();
+        // Bien ici on va gérer l'upload de l'image
+        $image = $request->file('image');
+        $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('storage/uploads/articles/images'), $imageName);
+        $validated["image"] = asset('storage/uploads/articles/images/' .  $imageName);
+        //Ennnnnnnnndddddddddddddddd
         $model = Article::create($validated);
         return new ArticleResource($model);
     }

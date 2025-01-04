@@ -21,6 +21,9 @@ class Article extends Model
         'contenu',
         'slug',
         'image',
+        'source',
+        'nb_vues',
+        'likes',
         'created_at',
         'updated_at',
     ];
