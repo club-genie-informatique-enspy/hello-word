@@ -21,12 +21,14 @@ class Activity extends Model
 
     public function likes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'activity_likes', 'activity_uuid', 'user_id');
+        return $this->belongsToMany(User::class, 'activity_likes', 'activity_uuid', 'user_id', 'activity_uuid', 'id');
     }
-
- 
-        public function toggleLike($userId)
+    public function toggleLike($userId)
     {
+        if (!is_numeric($userId)) {
+            return response()->json(['error' => 'Invalid user ID'], 400);
+        }
+
         if ($this->likes()->where('user_id', $userId)->exists()) {
             $this->likes()->detach($userId);
             return 'Disliked';
@@ -35,6 +37,8 @@ class Activity extends Model
             return 'Liked';
         }
     }
+
+    
 
     public function incrementViews()
     {
