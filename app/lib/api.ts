@@ -1,17 +1,17 @@
+import Cookies from 'js-cookie'
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 
-  const token = localStorage.getItem("authToken");
+  const token = Cookies.get("authToken");
 
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `Bearer ${token}`
-      , } : {}),
+      ...(token ? { 'Authorization': `Bearer ${token}`, } : {}),
       
     },
   });

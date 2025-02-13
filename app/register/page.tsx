@@ -10,6 +10,12 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "../provider/auth-provider"
 import { registerUser } from "../lib/auth"
+import Link from "next/link"
+import Error from "next/error"
+import { validateEmail } from "../lib/utils"
+import { UserData } from "@/type"
+
+
 
 export default function RegisterPage() {
   const { login, user } = useAuth()
@@ -31,32 +37,58 @@ export default function RegisterPage() {
   }, [user, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setIsLoading(true)
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas")
-      setIsLoading(false)
-      return
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+  
+    // Validation de l'email
+    if (!validateEmail(formData.email)) {
+      setError("L'email n'est pas valide");
+      setIsLoading(false);
+      return;
     }
-
+  
+    if (formData.password !== formData.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      setIsLoading(false);
+      return;
+    }
+    
+    if (!formData.name || !formData.email || !formData.password) {
+      setError("Tous les champs sont obligatoires.");
+      setIsLoading(false);
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      setError("Le mot de passe doit contenir au moins 6 caractères.");
+      setIsLoading(false);
+      return;
+    }
+  
     try {
-      const userData = await registerUser({
+      
+      const userData: UserData = {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-      })
-      login(userData)
-      router.push("/")
-      router.refresh()
-    } catch (error) {
-      setError("Erreur lors de l'inscription. Veuillez réessayer.")
+        role: "user"
+      };
+      
+      await registerUser(userData);
+  
+      // Rediriger vers la page de connexion
+      await login({ email: formData.email, password: formData.password });
+  
+      router.push("/");
+      router.refresh();
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      setError(error.message || "Erreur lors de l'inscription.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
-
+  };
   if (isLoading) {
     return (
       <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-200px)]">
@@ -144,6 +176,12 @@ export default function RegisterPage() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               S'inscrire
             </Button>
+            <div className="text-center mt-4">
+              <span className="text-gray-600">Deja un compte ? </span>
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Connectez vous
+              </Link>
+        </div>
           </form>
         </CardContent>
       </Card>

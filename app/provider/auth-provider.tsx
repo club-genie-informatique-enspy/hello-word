@@ -4,10 +4,12 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { useRouter, usePathname } from "next/navigation"
 import { User ,DataToLogin} from "@/type"
 import { fetchAPI } from "../lib/api"
+import Cookies from 'js-cookie'
 
 interface AuthContextType {
   user: User | null
   token: string|null
+  successLoginMessage: string | null
   login: (data: DataToLogin) => void
   logout: () => void
 }
@@ -16,7 +18,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   login: () => {},
   logout: () => {},
-  token: null
+  token: null,
+  successLoginMessage: null
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -24,11 +27,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
+  const [successLoginMessage, setsuccessLoginMessage] = useState<string | null>(null);
   
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("currentUser")
-    const storedToken = localStorage.getItem("authToken")
+    const storedUser = Cookies.get("currentUser")
+    const storedToken = Cookies.get("authToken")
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser))
@@ -54,9 +58,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
       const { user, token } = response; 
   
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      localStorage.setItem("authToken", token); 
+      Cookies.set("currentUser", JSON.stringify(user));
+      Cookies.set("authToken", token); 
       setUser(user);
+      setsuccessLoginMessage("Connexion réussie !");
+      setTimeout(() => setsuccessLoginMessage(null), 2000);
       
       router.push("/");
     } catch (error) {
@@ -67,13 +73,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null)
     setToken(null)
-    localStorage.removeItem("currentUser")
-    localStorage.removeItem("AuthToken")
+    Cookies.remove("currentUser")
+    Cookies.remove("AuthToken")
     router.push("/login")
+    router.refresh()
   }
 
   return (
-    <AuthContext.Provider value={{ user,token, login, logout }}>
+    <AuthContext.Provider value={{ user,token, login, logout ,successLoginMessage}}>
       {children}
     </AuthContext.Provider>
   )
