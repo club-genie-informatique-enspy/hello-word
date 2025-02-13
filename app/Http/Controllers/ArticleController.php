@@ -10,6 +10,7 @@ class ArticleController extends Controller
 {
 
     public function index()
+    
     {
         return ArticleResource::collection(Article::all());
     }
