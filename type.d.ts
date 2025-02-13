@@ -39,7 +39,12 @@ export interface User {
   name: string;
   email: string;
   password: string;
+  role: string;
 }
 
+export interface DataToLogin {
+  email: string;
+  password: string;
+}
 
 
