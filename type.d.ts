@@ -52,4 +52,24 @@ export interface DataToLogin {
   password: string;
 }
 
+export interface Activity{
+  activity_uuid: string;
+  type: string;
+  title: string;
+  description: string;
+  nb_vues: number;
+  likes:number;
+
+}
+export interface crushMessage{
+  
+  message_uuid: string;
+  activity_uuid: string;
+  sender: string;
+  contenu: string;
+  receiver: string;
+  nb_vues: number;
+  likes: number;
+
+}
 
