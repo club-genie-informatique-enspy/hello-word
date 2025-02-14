@@ -17,6 +17,11 @@ class ActivityController extends Controller
 
         return response()->json($activities);
     }
+    public function show(string $uuid)
+    {
+        $model = Activity::findByUuid($uuid);
+        return response()->json($this->formatActivity($model));
+    }
 
     public function store(Request $request)
     {
@@ -104,6 +109,7 @@ class ActivityController extends Controller
             'type' => $activity->type,
             'title' => $activity->title,
             'description' => $activity->description,
+            'rubrique_uuid' => $activity->rubrique_uuid,
             'nb_vues' => $activity->nb_vues,
             'likes' => $activity->likes->count(),
         ];

@@ -33,6 +33,7 @@ Route::get('commentaire/{uuid}', [CommentaireController::class, 'show']);
 
 // Récupérer les activités
 Route::get('/activities', [ActivityController::class, 'index']);
+Route::get('/activity/{uuid}', [ActivityController::class, 'show']);
 Route::get('/messages/{activity_uuid}', [MessageController::class, 'index']);
 
 
