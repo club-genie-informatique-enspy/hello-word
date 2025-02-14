@@ -77,7 +77,7 @@ Route::middleware('auth:sanctum','role:admin')->group(function () {
     Route::delete('rubriques/{uuid}', [RubriqueController::class, 'destroy']);
 
     //article management
-    Route::post('articles', [ArticleController::class, 'store']);
+    Route::post('articles/{rubrique_uuid}', [ArticleController::class, 'store']);
     Route::put('articles/{uuid}', [ArticleController::class, 'update']);
     Route::delete('articles/{uuid}', [ArticleController::class, 'destroy']);
 

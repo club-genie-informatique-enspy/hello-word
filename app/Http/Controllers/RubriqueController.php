@@ -66,28 +66,40 @@ class RubriqueController extends Controller
      */
     public function update(Request $request, $uuid)
     {
-        $rubrique = Rubrique::findByUuid($uuid);
+        $rubrique = Rubrique::where('rubrique_uuid', $uuid)->first();
+        
         if (!$rubrique) {
             return response()->json(['message' => 'Rubrique non trouvée'], 404);
         }
     
-        $request->validate([
+        // Validation des champs
+        $validatedData = $request->validate([
             'titre' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
     
+        // Gestion de l'image
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('storage/uploads/rubriques/images'), $imageName);
-            $rubrique->image = asset('storage/uploads/rubriques/images/' . $imageName);
+            $validatedData['image'] = asset('storage/uploads/rubriques/images/' . $imageName);
         }
     
-        $rubrique->update($request->only(['titre', 'description', 'image']));
+        // Mise à jour des données
+        $rubrique->fill($validatedData);
+    
+        // Vérification si des modifications ont été faites avant de sauvegarder
+        if ($rubrique->isDirty()) {
+            $rubrique->save();
+        } else {
+            return response()->json(['message' => 'Aucune modification détectée'], 200);
+        }
     
         return response()->json($rubrique);
     }
+    
     
     /**
      * Supprime une rubrique.

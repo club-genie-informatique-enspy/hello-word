@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Http\Resources\ArticleResource;
+use App\Models\Rubrique;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
@@ -16,18 +18,44 @@ class ArticleController extends Controller
         return ArticleResource::collection(Article::all());
     }
 
-    public function store(ArticleRequest $request): ArticleResource
+    public function store(Request $request, string $rubrique_uuid)
     {
-        $validated = $request->validated();
-        // Bien ici on va gérer l'upload de l'image
-        $image = $request->file('image');
-        $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('storage/uploads/articles/images'), $imageName);
-        $validated["image"] = asset('storage/uploads/articles/images/' .  $imageName);
-        //Ennnnnnnnndddddddddddddddd
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'contenu' => 'required|string',
+            'titre' => 'required|string',
+            'slug' => 'required|string',
+            'user_id' => 'required|integer',
+            'auteur' => 'required|string|max:255',
+            'source' => 'required|string|max:255',
+            'nb_vues' => 'required|integer',
+            'likes' => 'required|integer',
+            'article_uuid' => 'required|uuid|max:255',
+        ]);
+    
+        // Vérifier si la rubrique existe
+        $rubrique = Rubrique::where('rubrique_uuid', $rubrique_uuid)->first();
+        if (!$rubrique) {
+            return response()->json(['message' => 'Rubrique non trouvée'], 404);
+        }
+    
+        // Gestion de l'upload de l'image (si présente)
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('storage/uploads/articles/images'), $imageName);
+            $validated["image"] = asset('storage/uploads/articles/images/' . $imageName);
+        }
+    
+        // Associer l'article à la rubrique
+        $validated["rubrique_uuid"] = $rubrique->rubrique_uuid;
+    
+        // Créer l'article
         $model = Article::create($validated);
-        return new ArticleResource($model);
+    
+        return response()->json($model, 201);
     }
+    
 
     public function show(string $uuid)
     {
@@ -40,7 +68,7 @@ class ArticleController extends Controller
         $model = Article::findByUuid($uuid);
         $validated = $request->validated();
         $model = $model->update($validated);
-        return new ArticleResource($model);
+        return response()->json($model, 201);
     }
 
     public function destroy(string $uuid)
