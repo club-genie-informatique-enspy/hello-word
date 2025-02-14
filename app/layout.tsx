@@ -39,11 +39,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
 
-          <Header />
+          {/* <Header /> */}
 
           <main className="flex-grow">{children}</main>
 
-          <Footer />
+          {/* <Footer /> */}
           
         </ThemeProvider>
         {/* </AuthProvider> */}
