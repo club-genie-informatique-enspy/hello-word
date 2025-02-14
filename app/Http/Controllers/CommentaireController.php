@@ -6,6 +6,9 @@ use App\Http\Requests\CommentaireRequest;
 use App\Models\Article;
 use App\Models\Commentaire;
 use App\Http\Resources\CommentaireResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CommentaireController extends Controller
 {
@@ -15,12 +18,35 @@ class CommentaireController extends Controller
         return CommentaireResource::collection(Commentaire::all());
     }
 
-    public function store(CommentaireRequest $request, string $article_uuid)
-    {
-        $validated = $request->validated();
-        $model = Commentaire::create($validated);
-        return new CommentaireResource($model);
+   // Dans CommentaireController.php
+public function store(Request $request, string $article_uuid)
+{
+    // Vérifier si l'article existe
+    $article = Article::findByUuid($article_uuid);
+    if (!$article) {
+        return response()->json(['message' => 'Article non trouvé'], 404);
     }
+
+    // Valider les données
+    $validated = $request->validate([
+        'contenu' => 'required|string'
+    ]);
+
+    // Vérifier que l'utilisateur est authentifié
+    if (!Auth::check()) {
+        return response()->json(['message' => 'Utilisateur non authentifié'], 401);
+    }
+
+    // Ajout des champs supplémentaires
+    $validated['commentaire_uuid'] = Str::uuid();
+    $validated['article_uuid'] = $article_uuid;
+    $validated['user_id'] = Auth::id();
+
+    // Créer le commentaire
+    $commentaire = Commentaire::create($validated);
+
+    return new CommentaireResource($commentaire);
+}
 
     public function show(string $uuid)
     {

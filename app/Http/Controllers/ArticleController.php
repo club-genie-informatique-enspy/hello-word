@@ -8,6 +8,7 @@ use App\Http\Resources\ArticleResource;
 use App\Models\Rubrique;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -25,12 +26,11 @@ class ArticleController extends Controller
             'contenu' => 'required|string',
             'titre' => 'required|string',
             'slug' => 'required|string',
-            'user_id' => 'required|integer',
+            'user_id' => 'required|exists:users,id',
             'auteur' => 'required|string|max:255',
             'source' => 'required|string|max:255',
             'nb_vues' => 'required|integer',
-            'likes' => 'required|integer',
-            'article_uuid' => 'required|uuid|max:255',
+            'slogan'=>'required|string',
         ]);
     
         // Vérifier si la rubrique existe
@@ -39,23 +39,24 @@ class ArticleController extends Controller
             return response()->json(['message' => 'Rubrique non trouvée'], 404);
         }
     
-        // Gestion de l'upload de l'image (si présente)
+        // Gestion de l'upload de l'image
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('storage/uploads/articles/images'), $imageName);
-            $validated["image"] = asset('storage/uploads/articles/images/' . $imageName);
+            $validated['image'] = asset('storage/uploads/articles/images/' . $imageName);
         }
     
-        // Associer l'article à la rubrique
-        $validated["rubrique_uuid"] = $rubrique->rubrique_uuid;
+        // Ajout des champs supplémentaires
+        $validated['article_uuid'] = Str::uuid();
+        $validated['rubrique_uuid'] = $rubrique->rubrique_uuid;
     
         // Créer l'article
-        $model = Article::create($validated);
+        $article = Article::create($validated);
     
-        return response()->json($model, 201);
+        return new ArticleResource($article);
     }
-    
+        
 
     public function show(string $uuid)
     {
