@@ -38,8 +38,38 @@ export interface User {
   id: number;
   name: string;
   email: string;
+  role: string;
+}
+export interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
+export interface DataToLogin {
+  email: string;
   password: string;
 }
 
+export interface Activity{
+  activity_uuid: string;
+  type: string;
+  title: string;
+  description: string;
+  nb_vues: number;
+  likes:number;
 
+}
+export interface crushMessage{
+  
+  message_uuid: string;
+  activity_uuid: string;
+  sender: string;
+  contenu: string;
+  receiver: string;
+  nb_vues: number;
+  likes: number;
+
+}
 

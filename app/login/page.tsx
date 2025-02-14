@@ -1,4 +1,3 @@
-// app/login/page.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -8,16 +7,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { useAuth } from "../provider/auth-provider"
-import { loginUser } from "../lib/auth"
+import { useAuth} from "../provider/auth-provider"
+import Link from "next/link"
+import { validateEmail } from "../lib/utils"
 
 export default function LoginPage() {
-  const { login, user } = useAuth()
+  const { login, user,successLoginMessage } = useAuth()
   const router = useRouter()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: "",
+    email: "",
     password: "",
   })
 
@@ -33,13 +33,19 @@ export default function LoginPage() {
     setError("")
     setIsLoading(true)
 
+    // Validation de l'email
+    if (!validateEmail(formData.email)) {
+      setError("L'email n'est pas valide");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const userData = await loginUser(formData)
-      login(userData)
+      const userData = await login(formData)
       router.push("/")
       router.refresh()
     } catch (error) {
-      setError("Nom d'utilisateur ou mot de passe incorrect")
+      setError("Email ou mot de passe incorrect")
     } finally {
       setIsLoading(false)
     }
@@ -66,14 +72,14 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nom d'utilisateur</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="name"
+                id="email"  // Assure-toi que l'id correspond au bon champ
                 type="text"
-                placeholder="Entrez votre nom d'utilisateur"
-                value={formData.name}
+                placeholder="Entrez votre Email"
+                value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setFormData({ ...formData, email: e.target.value })
                 }
                 required
               />
@@ -100,10 +106,23 @@ export default function LoginPage() {
                 </Badge>
               </div>
             )}
+            {successLoginMessage && (
+              <div className="flex justify-center">
+                <Badge variant="default" className="text-sm">
+                  {successLoginMessage}
+                </Badge>
+              </div>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               Se connecter
             </Button>
+            <div className="text-center mt-4">
+              <span className="text-gray-600">Pas encore de compte ? </span>
+              <Link href="/register" className="text-blue-600 hover:underline">
+                Inscrivez-vous
+              </Link>
+            </div>
           </form>
         </CardContent>
       </Card>
