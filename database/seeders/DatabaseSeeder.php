@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ArticleSeeder::class,
             CommentaireSeeder::class,
             ActivitySeeder::class,
-
+            MessagesTableSeeder::class,
         ]);
 
     }
