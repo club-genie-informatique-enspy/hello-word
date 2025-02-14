@@ -8,6 +8,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RubriqueController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -15,44 +16,69 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware('auth:sanctum')->get('/profile', [AuthController::class, 'profile']);
 
 
+// Routes Rubriques
+Route::get('rubriques', [RubriqueController::class, 'index']);
+Route::get('rubriques/{uuid}', [RubriqueController::class, 'show']);
+Route::get('rubriques/{uuid}/articles', [RubriqueController::class, 'articles']);
 
 
-Route::apiResource('article', ArticleController::class);
+// Routes articles
+Route::get('articles', [ArticleController::class, 'index']);
+Route::get('articles/{uuid}', [ArticleController::class, 'show']);
 
 
-Route::apiResource('commentaire', CommentaireController::class)->only(['index','show','destroy','update']);
-
-
-
-
-Route::post('commentaire/{article_uuid}/', [CommentaireController::class, 'store']);
-
-
-
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
+// Récupérer tous les commentaires
+Route::get('commentaire', [CommentaireController::class, 'index']);
+Route::get('commentaire/{uuid}', [CommentaireController::class, 'show']);
 
 // Récupérer les activités
 Route::get('/activities', [ActivityController::class, 'index']);
-
-// Récupérer les messages d'une activite
 Route::get('/messages/{activity_uuid}', [MessageController::class, 'index']);
 
+
 // Routes Vues
-Route::post('/activity/{uuid}/view', [ActivityController::class, 'incrementViews']);
-Route::post('/message/{uuid}/view', [MessageController::class, 'incrementViews']);
+Route::post('/activity/{uuid}/increment-views', [ActivityController::class, 'incrementViews']);
+Route::post('/message/{uuid}/increment-views', [MessageController::class, 'incrementViews']);
+Route::post('/article/{uuid}/increment-views', [ArticleController::class, 'incrementViews']);
 
 // Récupérer nombre de likes et vues
 Route::get('/activity/{uuid}/likes', [ActivityController::class, 'getLikesCount']);
 Route::get('/activity/{uuid}/views', [ActivityController::class, 'getViewsCount']);
 Route::get('/message/{uuid}/likes', [MessageController::class, 'getLikesCount']);
 Route::get('/message/{uuid}/views', [MessageController::class, 'getViewsCount']);
+Route::get('/article/{uuid}/likes', [ArticleController::class, 'getLikesCount']);
+Route::get('/article/{uuid}/views', [ArticleController::class, 'getViewsCount']);
 
 
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
 
+
+Route::middleware('auth:sanctum','role:user|admin')->group(function () {
+   // Créer un commentaire pour un article spécifique
+   Route::post('commentaire/{article_uuid}', [CommentaireController::class, 'store']); 
+
+    // Routes Like/Dislike
+    Route::post('/activity/{uuid}/toogle-like', [ActivityController::class, 'toggleLike']);
+    Route::post('/message/{uuid}/toogle-like', [MessageController::class, 'toggleLike']);
+    Route::post('/article/{uuid}/toogle-like', [ArticleController::class, 'toggleLike']);
+
+   
+
+});
 
 Route::middleware('auth:sanctum','role:admin')->group(function () {
+    
+    //rubrique management
+    Route::post('rubriques', [RubriqueController::class, 'store']);
+    Route::put('rubriques/{uuid}', [RubriqueController::class, 'update']);
+    Route::delete('rubriques/{uuid}', [RubriqueController::class, 'destroy']);
+
+    //article management
+    Route::post('articles', [ArticleController::class, 'store']);
+    Route::put('articles/{uuid}', [ArticleController::class, 'update']);
+    Route::delete('articles/{uuid}', [ArticleController::class, 'destroy']);
 
     //activity management
     Route::post('/activity', [ActivityController::class, 'store']);
@@ -63,12 +89,12 @@ Route::middleware('auth:sanctum','role:admin')->group(function () {
     Route::post('/message', [MessageController::class, 'store']);
     Route::put('/message/{uuid}', [MessageController::class, 'update']);
     Route::delete('/message/{uuid}', [MessageController::class, 'destroy']);
-});
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Routes Like/Dislike
-    Route::post('/activity/{uuid}/toogle-like', [ActivityController::class, 'toggleLike']);
-    Route::post('/message/{uuid}/toogle-like', [MessageController::class, 'toggleLike']);
+    // Supprimer un commentaire spécifique
+    Route::delete('commentaire/{uuid}', [CommentaireController::class, 'destroy']);
+
+    // Mettre à jour un commentaire spécifique
+    Route::put('commentaire/{uuid}', [CommentaireController::class, 'update']);
 
 });
 

@@ -11,7 +11,11 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        return response()->json(Activity::with('messages', 'likes')->get());
+        $activities = Activity::with('likes')->get()->map(function ($activity) {
+            return $this->formatActivity($activity);
+        });
+
+        return response()->json($activities);
     }
 
     public function store(Request $request)
@@ -30,7 +34,7 @@ class ActivityController extends Controller
             'nb_vues' => 0,
         ]);
 
-        return response()->json($activity, 201);
+        return response()->json($this->formatActivity($activity), 201);
     }
 
     public function like($uuid)
@@ -38,6 +42,7 @@ class ActivityController extends Controller
         $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
         $user = Auth::user();
         $activity->likes()->attach($user->id);
+
         return response()->json(['message' => 'Liked!']);
     }
 
@@ -60,8 +65,8 @@ class ActivityController extends Controller
 
     public function getLikesCount($uuid)
     {
-        $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
-        return response()->json(['likes' => $activity->getLikesCount()]);
+        $activity = Activity::where('activity_uuid', $uuid)->withCount('likes')->firstOrFail();
+        return response()->json(['likes' => $activity->likes_count]);
     }
 
     public function getViewsCount($uuid)
@@ -71,26 +76,36 @@ class ActivityController extends Controller
     }
 
     public function update(Request $request, $uuid)
-{
-    $request->validate([
-        'type' => 'sometimes|string',
-        'title' => 'sometimes|string',
-        'description' => 'sometimes|string',
-    ]);
+    {
+        $request->validate([
+            'type' => 'sometimes|string',
+            'title' => 'sometimes|string',
+            'description' => 'sometimes|string',
+        ]);
 
-    $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
-    $activity->update($request->only(['type', 'title', 'description']));
+        $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
+        $activity->update($request->only(['type', 'title', 'description']));
 
-    return response()->json(['message' => 'Activity updated!', 'activity' => $activity]);
-}
+        return response()->json(['message' => 'Activity updated!', 'activity' => $this->formatActivity($activity)]);
+    }
 
-public function destroy($uuid)
-{
-    $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
-    $activity->delete();
+    public function destroy($uuid)
+    {
+        $activity = Activity::where('activity_uuid', $uuid)->firstOrFail();
+        $activity->delete();
 
-    return response()->json(['message' => 'Activity deleted!']);
-}
+        return response()->json(['message' => 'Activity deleted!']);
+    }
 
-
+    private function formatActivity($activity)
+    {
+        return [
+            'activity_uuid' => $activity->activity_uuid,
+            'type' => $activity->type,
+            'title' => $activity->title,
+            'description' => $activity->description,
+            'nb_vues' => $activity->nb_vues,
+            'likes' => $activity->likes->count(),
+        ];
+    }
 }

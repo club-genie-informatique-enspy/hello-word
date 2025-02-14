@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Rubrique;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -21,14 +22,16 @@ class ArticleFactory extends Factory
         return [
             'user_id' => fake()->randomElement($user_id),
             'article_uuid' => (string)Str::uuid(),
+            'rubrique_uuid' => Rubrique::all()->pluck('uuid')->random(),
             'image' => 'https://picsum.photos/640/480?random=' . fake()->numberBetween(1, 1000),
             'contenu' => fake()->sentence(),
             'titre' => fake()->word(),
+            'slogan' => fake()->word(),
             'slug' => fake()->unique()->slug(),
             'auteur' => fake()->word(),
             'source' => fake()->word(),
             'nb_vues' => fake()->randomNumber(),
-            'likes' => fake()->randomNumber(),
+            
         ];
     }
 }

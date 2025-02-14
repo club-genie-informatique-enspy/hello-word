@@ -14,7 +14,7 @@ readonly class ArticleDTO
         public? string $auteur,
         public? string $source,
         public? int $nbVue,
-        public? int $likes,
+        // public? int $likes,
         public? string $uuid,
 
     ) {}
@@ -27,7 +27,7 @@ readonly class ArticleDTO
             auteur : $request->get('auteur'),
             source : $request->get('source'),
             nbVue : $request->get('nbVue'),
-            likes : $request->get('likes'),
+            // likes : $request->get('likes'),
             uuid : $request->get('uuid'),
 
         );
