@@ -22,7 +22,7 @@ class ArticleResource extends JsonResource
             'image' => $this->image,
             'source' => $this->source,
             'nb_vues' => $this->nb_vues,
-            'likes' => $this->likes->count(),   
+            'likes' => $this->likes->count(),
             'slug' => $this->slug,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
