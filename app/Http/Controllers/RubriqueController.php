@@ -93,17 +93,26 @@ class RubriqueController extends Controller
      * Supprime une rubrique.
      */
     public function destroy($id)
-{
-    $rubrique = Rubrique::where('rubrique_uuid', $id)->firstOrFail();
+    {
+        $rubrique = Rubrique::where('rubrique_uuid', $id)->firstOrFail();
     
-    // Supprimer d'abord les articles liés
-    $rubrique->articles()->delete();
-
-    // Puis supprimer la rubrique
-    $rubrique->delete();
-
-    return response()->json(['message' => 'Rubrique supprimée avec succès']);
-}
+        // Récupérer tous les articles liés à cette rubrique
+        $articles = $rubrique->articles()->get();
+    
+        foreach ($articles as $article) {
+            // Supprimer tous les commentaires liés à l'article
+            $article->commentaires()->delete();
+            
+            // Supprimer l'article après la suppression des commentaires
+            $article->delete();
+        }
+    
+        // Une fois les articles supprimés, supprimer la rubrique
+        $rubrique->delete();
+    
+        return response()->json(['message' => 'Rubrique supprimée avec succès']);
+    }
+    
 
 
     /**
