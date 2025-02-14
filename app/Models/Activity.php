@@ -50,4 +50,9 @@ class Activity extends Model
         return $this->likes()->count();
     }
 
+    public static function findByUuid(string $uuid): ?Activity
+    {
+        return self::where('activity_uuid', $uuid)->first();
+    }
+
 }

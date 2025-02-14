@@ -21,10 +21,10 @@ class Rubrique extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function articles(): HasMany
-    {
-        return $this->hasMany(Article::class, 'rubrique_uuid', 'rubrique_uuid');
-    }
+    public function articles()
+{
+    return $this->hasMany(Article::class, 'rubrique_uuid', 'rubrique_uuid');
+}
 
     public static function findByUuid(string $uuid): ?Rubrique
     {

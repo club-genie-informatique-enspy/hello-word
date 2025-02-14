@@ -27,8 +27,9 @@ class ArticleResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'slogan'=>$this->slogan,
-            'rubrique_uuid'=>$this->rubrique->rubrique_uuid
-
+            'rubrique_uuid'=>$this->rubrique->rubrique_uuid,
+            'auteur'=>'Hello world',
+            'avatar'=>public_path('storage/helloword.png'),
         ];
     }
 }

@@ -56,7 +56,7 @@ Route::get('/csrf-token', function () {
 });
 
 
-Route::middleware('auth:sanctum','role:user|admin')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
    // Créer un commentaire pour un article spécifique
    Route::post('commentaire/{article_uuid}', [CommentaireController::class, 'store']); 
 

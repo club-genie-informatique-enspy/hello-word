@@ -35,7 +35,7 @@ class Article extends Model
 
     public function commentaires(): HasMany
     {
-        return $this->hasMany(Commentaire::class);
+        return $this->hasMany(Commentaire::class, 'article_uuid', 'article_uuid');
     }
 
     public function user(): BelongsTo

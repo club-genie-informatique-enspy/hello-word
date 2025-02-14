@@ -45,9 +45,11 @@ class ArticleController extends Controller
 
     public function destroy(string $uuid)
     {
-        $model = Article::findByUuid($uuid);
-        $model->delete();
-        return response(null, 204);
+        $article = Article::where('article_uuid', $uuid)->firstOrFail();
+        $article->commentaires()->delete();
+        $article->delete();
+
+        return response()->json(['message' => 'Article deleted!']);
     }
     public function like($uuid)
     {
