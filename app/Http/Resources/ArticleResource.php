@@ -25,7 +25,9 @@ class ArticleResource extends JsonResource
             'likes' => $this->likes,
             'slug' => $this->slug,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'slogan'=>$this->slogan,
+            'rubrique_uuid'=>$this->rubrique->rubrique_uuid
 
         ];
     }

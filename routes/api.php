@@ -23,8 +23,8 @@ Route::get('rubriques/{uuid}/articles', [RubriqueController::class, 'articles'])
 
 
 // Routes articles
-Route::get('articles', [ArticleController::class, 'index']);
-Route::get('articles/{uuid}', [ArticleController::class, 'show']);
+Route::get('article', [ArticleController::class, 'index']);
+Route::get('article/{uuid}', [ArticleController::class, 'show']);
 
 
 // Récupérer tous les commentaires

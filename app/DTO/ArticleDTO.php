@@ -16,6 +16,8 @@ readonly class ArticleDTO
         public? int $nbVue,
         // public? int $likes,
         public? string $uuid,
+        public? string $slogan,
+
 
     ) {}
 
@@ -29,6 +31,7 @@ readonly class ArticleDTO
             nbVue : $request->get('nbVue'),
             // likes : $request->get('likes'),
             uuid : $request->get('uuid'),
+            slogan:$request->get('slogan'),
 
         );
     }

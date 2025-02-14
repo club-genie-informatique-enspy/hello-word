@@ -24,6 +24,7 @@ class Article extends Model
         'image',
         'source',
         'nb_vues',
+        'slogan',
         'created_at',
         'updated_at',
     ];

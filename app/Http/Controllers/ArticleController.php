@@ -9,14 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
-
     public function index()
-    
     {
-        return ArticleResource::collection(Article::all());
+        $articles = Article::all()->map(function ($article) {
+            return $this->formatArticle($article);
+        });
+
+        return response()->json($articles);
     }
 
-    public function store(ArticleRequest $request): ArticleResource
+    public function store(ArticleRequest $request)
     {
         $validated = $request->validated();
         // Bien ici on va gérer l'upload de l'image
@@ -24,37 +26,39 @@ class ArticleController extends Controller
         $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('storage/uploads/articles/images'), $imageName);
         $validated["image"] = asset('storage/uploads/articles/images/' .  $imageName);
-        //Ennnnnnnnndddddddddddddddd
+
         $model = Article::create($validated);
-        return new ArticleResource($model);
+        return response()->json($this->formatArticle($model), 201);
     }
 
     public function show(string $uuid)
     {
         $model = Article::findByUuid($uuid);
-        return new ArticleResource($model);
+        return response()->json($this->formatArticle($model));
     }
 
     public function update(ArticleRequest $request, string $uuid)
     {
         $model = Article::findByUuid($uuid);
         $validated = $request->validated();
-        $model = $model->update($validated);
-        return new ArticleResource($model);
+        $model->update($validated);
+
+        return response()->json($this->formatArticle($model));
     }
 
     public function destroy(string $uuid)
     {
         $model = Article::findByUuid($uuid);
         $model->delete();
-        return response(null, 204);
+        return response()->json(['message' => 'Article deleted!'], 204);
     }
+
     public function like($uuid)
     {
         $article = Article::where('article_uuid', $uuid)->firstOrFail();
         $user = Auth::user();
         $article->likes()->attach($user->id);
-        
+
         return response()->json(['message' => 'Liked!']);
     }
 
@@ -78,16 +82,28 @@ class ArticleController extends Controller
     public function getLikesCount($uuid)
     {
         $article = Article::where('article_uuid', $uuid)->withCount('likes')->firstOrFail();
-        
+
         return response()->json(['likes' => $article->likes_count]);
     }
 
     public function getViewsCount($uuid)
     {
         $article = Article::where('article_uuid', $uuid)->firstOrFail();
-        
+
         return response()->json(['views' => $article->nb_vues]);
     }
 
-
+    // Méthode pour formater les articles
+    private function formatArticle($article)
+    {
+        return [
+            'article_uuid' => $article->article_uuid,
+            'activity_uuid' => $article->activity_uuid,
+            'titre' => $article->titre,
+            'contenu' => $article->contenu,
+            'image' => $article->image,
+            'nb_vues' => $article->nb_vues,
+            'likes' => $article->likes->count(), // Comptage des likes
+        ];
+    }
 }
