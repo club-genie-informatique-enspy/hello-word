@@ -1,51 +1,69 @@
-// app/for-you/page.tsx
 'use client';
 
-import ArticlesList from '@/components/v2/ArticlesList';
-import Sidebar from '@/components/v2/Sidebar';
-import CategoryFilter from '@/components/v2/CategorySection';
-import { Search } from 'lucide-react';
+import { useState } from "react";
+import ArticlesList from "@/components/v2/ArticlesList";
+import Sidebar from "@/components/v2/Sidebar";
+import { Search } from "lucide-react";
 
 export default function ForYouPage() {
+  const [selectedRubriqueId, setSelectedRubriqueId] = useState<number | null>(null);
+
+  const rubriques = [
+    { id: 1, nom: "Technology" },
+    { id: 2, nom: "Environment" },
+    { id: 3, nom: "Fashion" },
+    { id: 4, nom: "Energy" },
+    { id: 5, nom: "Lifestyle" },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-blue-600">For you</h1>
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
+          <button className="flex md:hidden bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors ml-4">
             Create Account
           </button>
         </div>
 
         {/* Search and Categories */}
         <div className="mb-8">
-          <div className="relative mb-6">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search articles"
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="relative mb-6 flex justify-between items-center w-full">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search articles"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <button className="hidden md:block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors ml-4">
+              Create Account
+            </button>
           </div>
 
-          {/* Category Filters */}
+          {/* Rubrique Filters */}
           <div className="flex gap-4 overflow-x-auto pb-2">
-            <button className="px-4 py-2 rounded-full bg-blue-600 text-white whitespace-nowrap">
+            <button
+              className={`px-4 py-2 rounded-full ${
+                selectedRubriqueId === null ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => setSelectedRubriqueId(null)}
+            >
               All
             </button>
-            <button className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap">
-              Technology
-            </button>
-            <button className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap">
-              Environment
-            </button>
-            <button className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap">
-              Business
-            </button>
-            <button className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap">
-              Politics
-            </button>
+            {rubriques.map(rubrique => (
+              <button
+                key={rubrique.id}
+                className={`px-4 py-2 rounded-full ${
+                  selectedRubriqueId === rubrique.id ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+                onClick={() => setSelectedRubriqueId(rubrique.id)}
+              >
+                {rubrique.nom}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -53,7 +71,7 @@ export default function ForYouPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Articles List */}
           <div className="lg:col-span-2">
-            <ArticlesList />
+            <ArticlesList selectedRubriqueId={selectedRubriqueId} />
           </div>
 
           {/* Sidebar */}
