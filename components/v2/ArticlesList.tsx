@@ -13,7 +13,6 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
     async function fetchArticles() {
       try {
         const fetchedArticles = await getAllArticles(); 
-        console.log(fetchArticles)
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Erreur lors du chargement des articles:", error);

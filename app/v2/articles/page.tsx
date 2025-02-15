@@ -1,19 +1,37 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArticlesList from "@/components/v2/ArticlesList";
+import { getAllRubriques } from "@/app/lib/article";
 import Sidebar from "@/components/v2/Sidebar";
 import { Search } from "lucide-react";
 
 export default function ForYouPage() {
   const [selectedRubriqueId, setSelectedRubriqueId] = useState<string | null>(null);
+  const [_rubriques, setRubriques] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchRubriques() {
+      try {
+        const fetchedRubriques = await getAllRubriques(); 
+        console.log(fetchRubriques)
+        setRubriques(_rubriques);
+      } catch (error) {
+        console.error("Erreur lors du chargement des Rubriques:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
+    fetchRubriques();
+  }, []);
   const rubriques = [
-    { id: "1", nom: "Technology" },
-    { id: "2", nom: "Environment" },
-    { id: "3", nom: "Fashion" },
-    { id: "4", nom: "Energy" },
-    { id: "5", nom: "Lifestyle" },
+    { rubrique_uuid: "1", nom: "Technology" },
+    { rubrique_uuid: "2", nom: "Environment" },
+    { rubrique_uuid: "3", nom: "Fashion" },
+    { rubrique_uuid: "4", nom: "Energy" },
+    { rubrique_uuid: "5", nom: "Lifestyle" },
   ];
 
   return (
@@ -55,11 +73,11 @@ export default function ForYouPage() {
             </button>
             {rubriques.map(rubrique => (
               <button
-                key={rubrique.id}
+                key={rubrique.rubrique_uuid}
                 className={`px-4 py-2 rounded-full ${
-                  selectedRubriqueId === rubrique.id ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  selectedRubriqueId === rubrique.rubrique_uuid ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setSelectedRubriqueId(rubrique.id)}
+                onClick={() => setSelectedRubriqueId(rubrique.rubrique_uuid)}
               >
                 {rubrique.nom}
               </button>

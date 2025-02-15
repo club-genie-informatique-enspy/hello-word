@@ -76,7 +76,7 @@ export interface crushMessage{
 
 }
 
-export interface rubrique{
+export interface Rubrique{
   rubrique_uuid: string;
   titre: string;
   description: string;
