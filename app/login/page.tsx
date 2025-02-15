@@ -1,51 +1,49 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { useAuth} from "../provider/auth-provider"
+import { useAuth } from "@/hooks/auth"
 import Link from "next/link"
 import { validateEmail } from "../lib/utils"
 
 export default function LoginPage() {
-  const { login, user,successLoginMessage } = useAuth()
   const router = useRouter()
-  const [error, setError] = useState("")
+  const { loginUser } = useAuth({ middleware: 'guest', redirectIfAuthenticated: '/' })
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
+  const [status, setStatus] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
 
-  useEffect(() => {
-    if (user) {
-      router.push("/")
-      router.refresh()
-    }
-  }, [user, router])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
     setIsLoading(true)
+    setErrors({})
+    setStatus(null)
 
     // Validation de l'email
     if (!validateEmail(formData.email)) {
-      setError("L'email n'est pas valide");
-      setIsLoading(false);
-      return;
+      setErrors({ email: ["L'email n'est pas valide"] })
+      setIsLoading(false)
+      return
     }
 
     try {
-      const userData = await login(formData)
-      router.push("/")
-      router.refresh()
+      await loginUser({
+        email: formData.email,
+        password: formData.password,
+        setErrors,
+        setStatus,
+      })
     } catch (error) {
-      setError("Email ou mot de passe incorrect")
+      // L'erreur est déjà gérée dans loginUser
     } finally {
       setIsLoading(false)
     }
@@ -74,7 +72,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"  // Assure-toi que l'id correspond au bon champ
+                id="email"
                 type="text"
                 placeholder="Entrez votre Email"
                 value={formData.email}
@@ -83,6 +81,11 @@ export default function LoginPage() {
                 }
                 required
               />
+              {errors.email && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.email[0]}
+                </Badge>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -97,19 +100,17 @@ export default function LoginPage() {
                 }
                 required
               />
+              {errors.password && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.password[0]}
+                </Badge>
+              )}
             </div>
 
-            {error && (
-              <div className="flex justify-center">
-                <Badge variant="destructive" className="text-sm">
-                  {error}
-                </Badge>
-              </div>
-            )}
-            {successLoginMessage && (
+            {status && (
               <div className="flex justify-center">
                 <Badge variant="default" className="text-sm">
-                  {successLoginMessage}
+                  {status}
                 </Badge>
               </div>
             )}

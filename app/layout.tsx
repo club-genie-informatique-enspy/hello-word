@@ -32,20 +32,21 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         {/* <AuthProvider> */}
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        > */}
 
           <Header />
 
           <main className="flex-grow">{children}</main>
 
           <Footer />
-          
+
        </ThemeProvider>
+
         {/* </AuthProvider> */}
       </body>
     </html>
