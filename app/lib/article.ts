@@ -4,7 +4,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 import { fetchAPI } from "./api";         
-import { Message } from "@/types/messages";
 
 
 export async function getAllArticles(): Promise<Article[]> {
