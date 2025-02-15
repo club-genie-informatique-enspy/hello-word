@@ -33,8 +33,8 @@ export const Navbar = () => {
                         <Link href="/v2/articles" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             Articles
                         </Link>
-                        <Link href="/v2/activities" className="text-gray-700 hover:text-[#FF9100] transition-colors">
-                            Activités
+                        <Link href="/v2/messages" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                            Crush Anonymes
                         </Link>
                         <Link href="/v2/about" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             À propos
