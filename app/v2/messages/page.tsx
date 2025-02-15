@@ -7,18 +7,7 @@ import toogleLike from '@/hooks/messages';
 import { useRouter } from 'next/navigation';
 
 // Types et interfaces
-interface MessageData {
-  sender: string;
-  receiver: string;
-  contenu: string;
-  likes: number;
-  message_uuid: string;
-}
 
-interface AnimationPosition {
-  top: number;
-  left: number;
-}
 
 interface MessageModalProps {
   messageData: MessageData | null;
@@ -150,9 +139,10 @@ const FloatingHeart: React.FC<FloatingHeartProps> = ({ delay }) => (
 // [Les composants AnimationStyles, FloatingBubble, FloatingHeart, et LikeAnimation restent identiques]
 
 const MessageModal: React.FC<MessageModalProps> = ({ messageData, isOpen, onClose, isLiked, onHeartClick }) => {
+
   const [showAnimation, setShowAnimation] = useState<boolean>(false);
   const [animationPosition, setAnimationPosition] = useState<AnimationPosition>({ top: 0, left: 0 });
-
+  
   if (!isOpen || !messageData) return null;
   
   const { sender, contenu, receiver, likes } = messageData;
@@ -311,6 +301,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
 const MESSAGES_PER_PAGE = 6;
 
+/*************  ✨ Codeium Command ⭐  *************/
+/******  475bc94f-3db9-4d44-8c5a-6afea83c5464  *******/
 const LoveMessagesBoard: React.FC = () => {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
@@ -326,12 +318,12 @@ const LoveMessagesBoard: React.FC = () => {
           setLoading(true);
           const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
           const token_ : string = localStorage.getItem('token')?.toString() || "";
-          console.log(data);
           setMessages(data);
           setToken(token_);
+          const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
           const initialLikes = data.reduce((acc, message) => ({
             ...acc,
-            [message.message_uuid]: false
+            [message.message_uuid]: likedMessages.includes(message.message_uuid)
           }), {});
           setLikes(initialLikes);
         } catch (err) {
@@ -345,7 +337,6 @@ const LoveMessagesBoard: React.FC = () => {
   }, []);
 
   const handleHeartClick = async (messageUuid: string) => {
-    // const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
       return;
@@ -358,6 +349,17 @@ const LoveMessagesBoard: React.FC = () => {
         uuid_message: messageUuid 
       });
 
+      const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+      const isLiked = likedMessages.includes(messageUuid);
+
+      if (isLiked) {
+        const updatedLikedMessages = likedMessages.filter((uuid: string) => uuid !== messageUuid);
+        localStorage.setItem('likedMessages', JSON.stringify(updatedLikedMessages));
+      } else {
+        const updatedLikedMessages = [...likedMessages, messageUuid];
+        localStorage.setItem('likedMessages', JSON.stringify(updatedLikedMessages));
+      }
+
       setLikes(prev => ({
         ...prev,
         [messageUuid]: !prev[messageUuid]
@@ -369,7 +371,6 @@ const LoveMessagesBoard: React.FC = () => {
           : msg
       ));
 
-      console.log('Like basculé avec succès :', result);
     } catch (err) {
       setError('Erreur lors du basculement du like.');
       console.error(err);
