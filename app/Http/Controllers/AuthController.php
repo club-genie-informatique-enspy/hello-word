@@ -40,7 +40,6 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Inscription réussie',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -61,7 +60,7 @@ class AuthController extends Controller
             'details' => $e->getMessage()
         ], 500);
     }
-}    
+}
 
     // Connexion
     // Connexion
