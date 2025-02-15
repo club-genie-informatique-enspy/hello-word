@@ -11,7 +11,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-bold mb-4">À propos</h3>
                         <p className="text-gray-600 mb-4">
-                            Journal universitaire dédié aux actualités universitaires et aux activités du campus.
+                            Journal du Polytechnicien dédié aux actualités universitares et aux activités du campus.
                         </p>
                         <div className="flex space-x-4">
                             <Link href="https://web.facebook.com/ClubGIND/">
@@ -47,8 +47,8 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/blog" className="text-gray-600 hover:text-[#FF9100]">
-                                    Blog
+                                <Link href="/v2/messages" className="text-gray-600 hover:text-[#FF9100]">
+                                    Crush Anonyme
                                 </Link>
                             </li>
                             <li>
@@ -69,17 +69,17 @@ const Footer = () => {
                         <h3 className="text-lg font-bold mb-4">Catégories</h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/articles?category=technology" className="text-gray-600 hover:text-[#FF9100]">
+                                <Link href="/v2" className="text-gray-600 hover:text-[#FF9100]">
                                     Technologie
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/articles?category=environment" className="text-gray-600 hover:text-[#FF9100]">
+                                <Link href="/v2" className="text-gray-600 hover:text-[#FF9100]">
                                     Environnement
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/articles?category=business" className="text-gray-600 hover:text-[#FF9100]">
+                                <Link href="/v2" className="text-gray-600 hover:text-[#FF9100]">
                                     Business
                                 </Link>
                             </li>
@@ -96,20 +96,24 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center">
                                 <i className="fas fa-phone w-5"></i>
-                                <span>+237 696 696 696</span>
+                                <span>+237 697 186 897</span>
                             </li>
                             <li className="flex items-center">
                                 <i className="fas fa-envelope w-5"></i>
-                                <span>clubgi@gmail.com</span>
+                                <span>clubinfoenspy@gmail.com</span>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 {/* Bas de page */}
-                <div className="border-t border-gray-200 mt-8 pt-8 text-center">
+                <div className="flex justify-between border-t border-gray-200 mt-8 pt-8  w-full text-center">
+                    <h6 className="flex text-gray-600">
+                        © {new Date().getFullYear()} Journal Universitaire 
+                    </h6>
+                    <h6 className="text-[#FF9100]">Hello-World. Le journal du pipo.</h6>
                     <h6 className="text-gray-600">
-                        © {new Date().getFullYear()} Journal Universitaire <p className="text-[#FF9100]">Hello-World</p>. Tous droits réservés.
+                        ClubGI. Tous droits réservés. 
                     </h6>
                 </div>
             </div>

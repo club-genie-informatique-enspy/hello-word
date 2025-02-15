@@ -24,6 +24,7 @@ interface Article {
   created_at: string; 
   updated_at: string; 
   slogan: string;
+  auteur:string;
   rubrique_uuid: string;
 }
 
