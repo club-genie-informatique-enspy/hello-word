@@ -36,7 +36,7 @@ class ArticleSeeder extends Seeder
                 'titre'        => 'CÉRÉMONIE D\'INSTALLATION OFFICIELLE 🎓✨',
                 'slug'         => Str::slug('Cérémonie Installation Officielle'),
                 'contenu'      => "Le Vendredi 14 février 2025, la Salle des Actes de l'\u00c9cole Nationale Supérieure Polytechnique de Yaoundé a accueilli la cérémonie officielle d'installation des présidents élus des clubs et associations, ainsi que les membres de l'Exécutif de l'AE-ENSPY.\n\nPrésidée par le Directeur de l'ENSPY, cette cérémonie a marqué le début d'un mandat placé sous le signe de l'engagement, du dynamisme et de la collaboration pour le rayonnement de la communauté polytechnicienne.\n\nFélicitations aux nouveaux responsables et plein succès dans leurs missions ! 🎓",
-                'image'        => 'https://picsum.photos/640/480?random=1',
+                'image'        => public_path('vie-sur-campus-1.jpeg'),
                 'auteur'       => 'Administration ENSPY',
                 'source'       => 'Communiqué officiel',
                 'nb_vues'      => 0,
