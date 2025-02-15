@@ -309,7 +309,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
 const MESSAGES_PER_PAGE = 6;
 
-const LoveMessagesBoard: React.FC<{activityUuid: string}> = ({ activityUuid }) => {
+const LoveMessagesBoard: React.FC = () => {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
   const [loading, setLoading] = useState<boolean>(true);
@@ -323,7 +323,7 @@ const LoveMessagesBoard: React.FC<{activityUuid: string}> = ({ activityUuid }) =
         try {
           setLoading(true);
           const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
-          const token_ = localStorage.getItem('token');
+          const token_ : string = localStorage.getItem('token')?.toString() || "";
           console.log(data);
           setMessages(data);
           setToken(token_);
@@ -340,7 +340,7 @@ const LoveMessagesBoard: React.FC<{activityUuid: string}> = ({ activityUuid }) =
       };
   
       fetchMessages();
-  }, [activityUuid]);
+  }, []);
 
   const handleHeartClick = async (messageUuid: string) => {
     // const token = localStorage.getItem('token');

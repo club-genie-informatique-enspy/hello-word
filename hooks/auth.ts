@@ -14,15 +14,19 @@ interface AuthErrors {
 
 export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = {}) => {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
-    const [token, setToken] = useState<string | null>(() => {
-        const storedToken = localStorage.getItem('token');
-        return storedToken ? JSON.parse(storedToken) : null;
-    });
+    const [user, setUser] = useState<User | null>(null);
+    const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    // Initialiser l'état côté client
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storedUser = localStorage.getItem('user');
+            const storedToken = localStorage.getItem('token');
+            setUser(storedUser ? JSON.parse(storedUser) : null);
+            setToken(storedToken ? JSON.parse(storedToken) : null);
+        }
+    }, []);
 
     const loginUser = async ({ setErrors, setStatus, ...props }: {
         setErrors: (errors: AuthErrors) => void;
@@ -33,9 +37,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
 
         try {
             const response = await axios.post('/login', props);
-            console.log(response.data); // 
-            localStorage.setItem('user', JSON.stringify(response.data.data));
-            localStorage.setItem('token', JSON.stringify(response.data.token));
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('user', JSON.stringify(response.data.data));
+                localStorage.setItem('token', JSON.stringify(response.data.token));
+            }
             setUser(response.data);
             setToken(response.data.token);
             router.push('/');
@@ -56,9 +61,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
 
         try {
             const response = await axios.post('/register', props);
-            console.log(response.data.user);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            localStorage.setItem('token', JSON.stringify(response.data.token));
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+                localStorage.setItem('token', JSON.stringify(response.data.token));
+            }
             setUser(response.data);
             setToken(response.data.token);
             router.push('/');
@@ -73,24 +79,28 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
     };
 
     const logout = useCallback(async () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        }
         setUser(null);
         setToken(null);
         router.push('/');
     }, [router]);
 
     useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user && token) {
-            router.push(redirectIfAuthenticated);
-        }
+        if (typeof window !== 'undefined') {
+            if (middleware === 'guest' && redirectIfAuthenticated && user && token) {
+                router.push(redirectIfAuthenticated);
+            }
 
-        if (middleware === 'auth' && (!user || !token)) {
-            router.push('/signin');
-        }
+            if (middleware === 'auth' && (!user || !token)) {
+                router.push('/signin');
+            }
 
-        if (middleware === 'auth' && error) {
-            logout();
+            if (middleware === 'auth' && error) {
+                logout();
+            }
         }
     }, [error, middleware, redirectIfAuthenticated, router, logout, user, token]);
 

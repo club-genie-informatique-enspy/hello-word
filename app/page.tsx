@@ -1,4 +1,3 @@
-import HomeContent from "./HomeContent";
 import HomePage from "./v2/page"
 import type { Metadata } from "next";
 

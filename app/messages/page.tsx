@@ -3,13 +3,10 @@ import { useEffect, useState } from "react";
 import { getAllActivities } from "@/app/lib/activity";
 import { getAllMessages } from "../lib/crush-messages";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
 import { CrushMessageCard } from "@/components/crushMessageCard";
 import { Activity ,crushMessage} from "@/type";
 
-// Composant CrushMessageCard
 
-// Composant CrushActivityHeader
 export default function CrushActivityHeader() {
 const [activity, setActivity] = useState<Activity | null>(null);
   const [topMessages, setTopMessages] = useState<crushMessage[]>([]);

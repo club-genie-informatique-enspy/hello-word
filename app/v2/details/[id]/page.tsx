@@ -11,7 +11,7 @@ export default function BlogPage() {
 
   const params = useParams();
   const router = useRouter();
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState<Article | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   // console.log("PARAMS",params.id);
@@ -39,9 +39,9 @@ export default function BlogPage() {
 
     const fetchArticle = async () => {
       try {
-        const data = await getArticle(article_uuid);
+        const data :Article = await getArticle(article_uuid as string);
         setPost(data);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.message);
       } finally {
         setLoading(false);

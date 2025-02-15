@@ -31,7 +31,7 @@ export function Card({ item }: CardProps) {
 
     const updatedArticle = { ...item, likes: newLikes };
 
-    await updateArticle(item.article_uuid , updatedArticle);
+    // await updateArticle(item.article_uuid , updatedArticle);
 
 
   };

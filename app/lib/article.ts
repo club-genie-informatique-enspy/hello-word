@@ -1,4 +1,3 @@
-import { Article } from "@/type";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -20,24 +19,24 @@ export async function getArticle(uuid: string): Promise<Article> {
   return fetchAPI(`/article/${uuid}`);
 }
 
-export async function getArticlesByAuthor(authorSlug: string): Promise<Article[]> {
-  const articles = await getAllArticles();
-  return articles.filter(article =>
-    article.auteur.toLowerCase().trim().split(" ").join("-") === authorSlug
-  );
-}
+// export async function getArticlesByAuthor(authorSlug: string): Promise<Article[]> {
+//   const articles = await getAllArticles();
+//   return articles.filter(article =>
+//     article.auteur.toLowerCase().trim().split(" ").join("-") === authorSlug
+//   );
+// }
 
-export async function getAuthors(): Promise<{ slug: string; name: string; }[]> {
-  const articles = await getAllArticles();
-  const authorsMap = new Map();
+// export async function getAuthors(): Promise<{ slug: string; name: string; }[]> {
+//   const articles = await getAllArticles();
+//   const authorsMap = new Map();
 
-  articles.forEach(article => {
-    const slug = article.auteur.toLowerCase().trim().split(" ").join("-");
-    authorsMap.set(slug, { slug, name: article.auteur });
-  });
+//   articles.forEach(article => {
+//     const slug = article.auteur.toLowerCase().trim().split(" ").join("-");
+//     authorsMap.set(slug, { slug, name: article.auteur });
+//   });
 
-  return Array.from(authorsMap.values());
-}
+//   return Array.from(authorsMap.values());
+// }
 
 export async function createArticle(articleData: Omit<Article, 'article_uuid'>): Promise<Article> {
   // Route pour la création d'un article
