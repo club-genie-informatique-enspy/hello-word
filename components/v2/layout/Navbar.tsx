@@ -126,7 +126,7 @@ export const Navbar = () => {
                                 Crush Anonymes
                             </Link>
                             <Link
-                                href="/v2/about"
+                                href="#"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >

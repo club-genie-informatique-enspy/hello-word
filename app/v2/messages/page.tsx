@@ -6,18 +6,7 @@ import toogleLike from '@/hooks/messages';
 import { useRouter } from 'next/navigation';
 
 // Types et interfaces
-interface MessageData {
-  sender: string;
-  receiver: string;
-  contenu: string;
-  likes: number;
-  message_uuid: string;
-}
 
-interface AnimationPosition {
-  top: number;
-  left: number;
-}
 
 interface MessageModalProps {
   messageData: MessageData | null;
@@ -149,9 +138,10 @@ const FloatingHeart: React.FC<FloatingHeartProps> = ({ delay }) => (
 // [Les composants AnimationStyles, FloatingBubble, FloatingHeart, et LikeAnimation restent identiques]
 
 const MessageModal: React.FC<MessageModalProps> = ({ messageData, isOpen, onClose, isLiked, onHeartClick }) => {
+
   const [showAnimation, setShowAnimation] = useState<boolean>(false);
   const [animationPosition, setAnimationPosition] = useState<AnimationPosition>({ top: 0, left: 0 });
-
+  
   if (!isOpen || !messageData) return null;
   
   const { sender, contenu, receiver, likes } = messageData;
@@ -271,44 +261,83 @@ const MessageCard: React.FC<MessageCardProps> = ({ messageData, onHeartClick, is
   );
 };
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => (
-  <div className="flex justify-center items-center gap-4 mt-8 mb-4">
-    <button
-      onClick={() => onPageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-      className="p-2 rounded-full hover:bg-pink-100 disabled:opacity-50 disabled:hover:bg-transparent"
-    >
-      <ChevronLeft className="w-6 h-6" />
-    </button>
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const getPageNumbers = () => {
+    const pages: (number | "...")[] = [];
     
-    <div className="flex gap-2">
-      {[...Array(totalPages)].map((_, index) => (
-        <button
-          key={index + 1}
-          onClick={() => onPageChange(index + 1)}
-          className={`w-8 h-8 rounded-full ${
-            currentPage === index + 1
-              ? 'bg-pink-500 text-white'
-              : 'bg-pink-100 hover:bg-pink-200'
-          }`}
-        >
-          {index + 1}
-        </button>
-      ))}
-    </div>
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
 
-    <button
-      onClick={() => onPageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-      className="p-2 rounded-full hover:bg-pink-100 disabled:opacity-50 disabled:hover:bg-transparent"
-    >
-      <ChevronRight className="w-6 h-6" />
-    </button>
-  </div>
-);
+    pages.push(1);
+    if (currentPage > 3) pages.push("...");
+    
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      pages.push(i);
+    }
+    
+    if (currentPage < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+
+    return pages;
+  };
+
+  return (
+    <div className="flex flex-wrap justify-center items-center gap-2 mt-6 mb-4">
+      {/* Bouton Précédent */}
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-2 rounded-full hover:bg-pink-100 disabled:opacity-50 disabled:hover:bg-transparent"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+
+      {/* Numéros de page */}
+      <div className="flex gap-2">
+        {getPageNumbers().map((page, index) =>
+          page === "..." ? (
+            <span key={index} className="w-6 text-center">...</span>
+          ) : (
+            <button
+/**
+ * LoveMessagesBoard is a React functional component that fetches and displays a paginated 
+ * list of love messages. It manages user interactions such as liking messages. The component 
+ * handles loading states, error states, and pagination. It uses the `useRouter` hook to 
+ * redirect unauthenticated users to the login page. The component also integrates animation 
+ * effects for floating bubbles and hearts.
+ */
+
+              key={page}
+              onClick={() => onPageChange(page as number)}
+              className={`w-6 h-6 text-sm rounded-full transition ${
+                currentPage === page
+                  ? "bg-pink-500 text-white"
+                  : "bg-pink-100 hover:bg-pink-200"
+              }`}
+            >
+              {page}
+            </button>
+          )
+        )}
+      </div>
+
+      {/* Bouton Suivant */}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-2 rounded-full hover:bg-pink-100 disabled:opacity-50 disabled:hover:bg-transparent"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+};
 
 const MESSAGES_PER_PAGE = 6;
 
+/*************  ✨ Codeium Command ⭐  *************/
+/******  475bc94f-3db9-4d44-8c5a-6afea83c5464  *******/
 const LoveMessagesBoard: React.FC = () => {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
@@ -324,12 +353,12 @@ const LoveMessagesBoard: React.FC = () => {
           setLoading(true);
           const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
           const token_ : string = localStorage.getItem('token')?.toString() || "";
-          console.log(data);
           setMessages(data);
           setToken(token_);
+          const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
           const initialLikes = data.reduce((acc, message) => ({
             ...acc,
-            [message.message_uuid]: false
+            [message.message_uuid]: likedMessages.includes(message.message_uuid)
           }), {});
           setLikes(initialLikes);
         } catch (err) {
@@ -343,7 +372,6 @@ const LoveMessagesBoard: React.FC = () => {
   }, []);
 
   const handleHeartClick = async (messageUuid: string) => {
-    // const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
       return;
@@ -356,6 +384,17 @@ const LoveMessagesBoard: React.FC = () => {
         uuid_message: messageUuid 
       });
 
+      const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+      const isLiked = likedMessages.includes(messageUuid);
+
+      if (isLiked) {
+        const updatedLikedMessages = likedMessages.filter((uuid: string) => uuid !== messageUuid);
+        localStorage.setItem('likedMessages', JSON.stringify(updatedLikedMessages));
+      } else {
+        const updatedLikedMessages = [...likedMessages, messageUuid];
+        localStorage.setItem('likedMessages', JSON.stringify(updatedLikedMessages));
+      }
+
       setLikes(prev => ({
         ...prev,
         [messageUuid]: !prev[messageUuid]
@@ -367,7 +406,6 @@ const LoveMessagesBoard: React.FC = () => {
           : msg
       ));
 
-      console.log('Like basculé avec succès :', result);
     } catch (err) {
       setError('Erreur lors du basculement du like.');
       console.error(err);
@@ -397,7 +435,7 @@ const LoveMessagesBoard: React.FC = () => {
   const displayedMessages = messages.slice(startIndex, startIndex + MESSAGES_PER_PAGE);
 
   return (
-    <div className="relative p-8 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
+    <div className="relative p-8 mt-16 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
       <AnimationStyles />
       
       {[...Array(15)].map((_, i) => (
