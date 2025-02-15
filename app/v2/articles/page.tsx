@@ -6,18 +6,18 @@ import Sidebar from "@/components/v2/Sidebar";
 import { Search } from "lucide-react";
 
 export default function ForYouPage() {
-  const [selectedRubriqueId, setSelectedRubriqueId] = useState<number | null>(null);
+  const [selectedRubriqueId, setSelectedRubriqueId] = useState<string | null>(null);
 
   const rubriques = [
-    { id: 1, nom: "Technology" },
-    { id: 2, nom: "Environment" },
-    { id: 3, nom: "Fashion" },
-    { id: 4, nom: "Energy" },
-    { id: 5, nom: "Lifestyle" },
+    { id: "1", nom: "Technology" },
+    { id: "2", nom: "Environment" },
+    { id: "3", nom: "Fashion" },
+    { id: "4", nom: "Energy" },
+    { id: "5", nom: "Lifestyle" },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 mt-16">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
@@ -59,7 +59,7 @@ export default function ForYouPage() {
                 className={`px-4 py-2 rounded-full ${
                   selectedRubriqueId === rubrique.id ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setSelectedRubriqueId(rubrique.article_uuid)}
+                onClick={() => setSelectedRubriqueId(rubrique.id)}
               >
                 {rubrique.nom}
               </button>

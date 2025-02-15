@@ -5,10 +5,12 @@ import Link from 'next/link';
 interface ArticleCardProps {
   article: {
     article_uuid: string;
-    title: string;
-    excerpt: string;
+    titre: string;
+    slogan: string;
     image?: string;
-    author: { name: string; avatar?: string };
+    auteur: string;
+    avatar: string;
+    source: string;
     likes: number;
   };
   comments: number;
@@ -20,7 +22,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, comments }) => {
       <div className="flex gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow">
         <img
           src={article.image || "/api/placeholder/100/100"}
-          alt={article.title}
+          alt={article.titre}
           className="w-24 h-24 rounded-lg object-cover"
         />
         <div className="flex-1">
@@ -37,7 +39,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, comments }) => {
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span>{article.likes} <Heart className="inline w-4 h-4" /></span>
-              <span>Comment <MessageSquare className="inline w-4 h-4" /></span>
+              <span>Comment <MessageSquare className="inline w-4 h-4" />--</span>
             </div>
           </div>
         </div>

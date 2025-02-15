@@ -4,8 +4,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Footer from "@/components/v2/layout/Footer";
-import {Navbar} from "@/components/v2/layout/Navbar";
 import TopicsCarousel from "@/components/TopicsCarousel";
 import BestArticles from "@/components/v2/BestArticles";
 import AnimatedCounter from "@/components/v2/AnimatedCounter"
@@ -67,7 +65,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar/>
+    
 
       {/* Hero Section */}
       <section className="py-16 relative overflow-hidden">
@@ -114,8 +112,6 @@ export default function HomePage() {
             }}
         />
 
-      {/* Footer */}
-      <Footer/>
     </div>
   );
 }

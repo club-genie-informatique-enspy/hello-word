@@ -1,3 +1,5 @@
+'use client';
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -5,6 +7,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import SessionProviderWrapper from "@/components/v2/SessionProviderWrapper";
 import { Navbar } from "@/components/v2/layout/Navbar";
+import Footer from "@/components/v2/layout/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,10 +20,10 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "Home | Hello World",
-  description: "Le journal du pipo par le pipo et pour le pipo.",
-};
+// export const metadata: Metadata = {
+//   title: "Home | Hello World",
+//   description: "Le journal du pipo par le pipo et pour le pipo.",
+// };
 
 export default function RootLayout({
   children,
@@ -33,8 +36,9 @@ export default function RootLayout({
         {/* <AuthProvider> */}
           <main className="flex-grow">
               <SessionProviderWrapper>
-                {/* <Navbar /> */}
+                <Navbar />
                 {children}
+                <Footer/>
                 </SessionProviderWrapper>
           </main>
         {/* </AuthProvider> */}

@@ -104,28 +104,28 @@ export const Navbar = () => {
                     <div className="md:hidden bg-white py-4 border-t">
                         <div className="flex flex-col space-y-4 px-4">
                             <Link
-                                href="/Articles"
+                                href="/v2/articles"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Articles
                             </Link>
                             <Link
-                                href="/Activities"
+                                href="/v2/activities"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Activités
                             </Link>
                             <Link
-                                href="/About"
+                                href="/v2/about"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 À propos
                             </Link>
                             <Link
-                                href="/Contact"
+                                href="/v2/contact"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
