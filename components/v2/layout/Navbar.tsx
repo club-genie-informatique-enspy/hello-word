@@ -24,7 +24,7 @@ export const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Link href="/v2" className="flex-shrink-0">
+                <Link href="/v2" className="flex-shrink-0">
                         <div className="relative w-32 h-12 md:w-40 md:h-16">
                         <Image
                             alt="Logo"
@@ -120,11 +120,11 @@ export const Navbar = () => {
                                 Articles
                             </Link>
                             <Link
-                                href="/v2/activities"
+                                href="/v2/messages"
                                 className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                Activités
+                                Crush Anonymes
                             </Link>
                             <Link
                                 href="/v2/about"

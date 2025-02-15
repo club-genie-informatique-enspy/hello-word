@@ -8,9 +8,6 @@ interface ToggleLikeParams {
 const toogleLike = async ({ token, uuid_message }: ToggleLikeParams) => {
 
 
-    console.log("Headers envoyés :", {
-        Authorization: `Bearer ${token}`,
-      });
 
     try {
         const response = await axios.post(
@@ -22,6 +19,7 @@ const toogleLike = async ({ token, uuid_message }: ToggleLikeParams) => {
             },
           }
         );
+        console.log(response.data);
         return response.data;
       } catch (error: any) {
         console.error('Erreur lors du basculement du like :', error);

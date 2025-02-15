@@ -1,13 +1,129 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMessages } from '@/app/lib/article';
-import  toogleLike  from '@/hooks/messages';
+import toogleLike from '@/hooks/messages';
 import { useRouter } from 'next/navigation';
 
+// Types et interfaces
+interface MessageData {
+  sender: string;
+  receiver: string;
+  contenu: string;
+  likes: number;
+  message_uuid: string;
+}
+
+interface AnimationPosition {
+  top: number;
+  left: number;
+}
+
+interface MessageModalProps {
+  messageData: MessageData | null;
+  isOpen: boolean;
+  onClose: () => void;
+  isLiked: boolean;
+  onHeartClick: () => void;
+}
+
+interface MessageCardProps {
+  messageData: MessageData;
+  onHeartClick: () => void;
+  isLiked: boolean;
+  isRight: boolean;
+}
+
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+interface FloatingBubbleProps {
+  delay: number;
+}
+
+interface FloatingHeartProps {
+  delay: number;
+}
+
+interface LikeAnimationProps {
+  top: number;
+  left: number;
+}
+
+
+// Styles intégrés pour les animations
+const AnimationStyles: React.FC = () => (
+  <style jsx global>{`
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px); opacity: 0; }
+    }
+    
+    @keyframes sideWays {
+      0% { margin-left: 0; }
+      50% { margin-left: 50px; }
+      100% { margin-left: 0; }
+    }
+    
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    
+    @keyframes floatAway {
+      0% { 
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      100% { 
+        transform: translate(var(--tx, 50px), var(--ty, -50px)) rotate(var(--r, 90deg)) scale(0);
+        opacity: 0;
+      }
+    }
+    
+    .animate-float-away:nth-child(1) { --tx: 60px; --ty: -40px; --r: 45deg; }
+    .animate-float-away:nth-child(2) { --tx: 40px; --ty: -60px; --r: 90deg; }
+    .animate-float-away:nth-child(3) { --tx: 10px; --ty: -70px; --r: 135deg; }
+    .animate-float-away:nth-child(4) { --tx: -20px; --ty: -60px; --r: 180deg; }
+    .animate-float-away:nth-child(5) { --tx: -40px; --ty: -40px; --r: 225deg; }
+    .animate-float-away:nth-child(6) { --tx: -50px; --ty: -10px; --r: 270deg; }
+  `}</style>
+);
+
+
+// Animation de like
+const LikeAnimation: React.FC<LikeAnimationProps> = ({ top, left }) => (
+  <div 
+    className="absolute pointer-events-none"
+    style={{ top, left }}
+  >
+    <div className="relative">
+      {[...Array(6)].map((_, i) => (
+        <Heart 
+          key={i}
+          size={16}
+          className="absolute left-52 text-red-500 animate-float-away"
+          style={{
+            animation: `floatAway 1s forwards ${i * 0.1}s`,
+            transform: `rotate(${i * 60}deg)`
+          }}
+        />
+      ))}
+    </div>
+  </div>
+);
+
+
 // Composant pour les bulles flottantes
-const FloatingBubble = ({ delay }) => (
+const FloatingBubble: React.FC<FloatingBubbleProps> = ({ delay }) => (
   <div 
     className="absolute w-4 h-4 rounded-full bg-blue-200/30"
     style={{
@@ -18,7 +134,7 @@ const FloatingBubble = ({ delay }) => (
 );
 
 // Composant pour les cœurs flottants
-const FloatingHeart = ({ delay }) => (
+const FloatingHeart: React.FC<FloatingHeartProps> = ({ delay }) => (
   <div 
     className="absolute text-red-300/30"
     style={{
@@ -30,33 +146,19 @@ const FloatingHeart = ({ delay }) => (
   </div>
 );
 
-// Animation de like
-const LikeAnimation = ({ top, left }) => (
-  <div 
-    className="absolute pointer-events-none"
-    style={{ top, left }}
-  >
-    <div className="relative">
-      {[...Array(6)].map((_, i) => (
-        <Heart 
-          key={i}
-          size={16}
-          className="absolute text-red-500 animate-float-away"
-          style={{
-            animation: `floatAway 1s forwards ${i * 0.1}s`,
-            transform: `rotate(${i * 60}deg)`
-          }}
-        />
-      ))}
-    </div>
-  </div>
-);
 
-const MessageCard = ({ message, onHeartClick, isLiked, likeCount, isRight }) => {
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [animationPosition, setAnimationPosition] = useState({ top: 0, left: 0 });
+// [Les composants AnimationStyles, FloatingBubble, FloatingHeart, et LikeAnimation restent identiques]
 
-  const handleHeartClick = (e) => {
+const MessageModal: React.FC<MessageModalProps> = ({ messageData, isOpen, onClose, isLiked, onHeartClick }) => {
+  const [showAnimation, setShowAnimation] = useState<boolean>(false);
+  const [animationPosition, setAnimationPosition] = useState<AnimationPosition>({ top: 0, left: 0 });
+
+  if (!isOpen || !messageData) return null;
+  
+  const { sender, contenu, receiver, likes } = messageData;
+
+  const handleHeartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
     setAnimationPosition({
       top: e.clientY - rect.top,
@@ -68,45 +170,109 @@ const MessageCard = ({ message, onHeartClick, isLiked, likeCount, isRight }) => 
   };
 
   return (
-    <div className={`relative p-4 bg-pink-50 rounded-lg h-auto border-2 border-red-300 w-64 shadow-md 
-      hover:shadow-lg transition-shadow duration-300
-      ${isRight ? 'ml-auto' : ''}`}
-    >
-      <div className="flex  justify-between items-start mb-2">
-        <span className="font-semibold">À «{message.receiver}»</span>
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={handleHeartClick}
-            className="focus:outline-none transform transition-transform hover:scale-110"
-          >
-            <Heart 
-              className={`w-5 h-5 transition-colors duration-300 ${isLiked ? 'fill-red-500 text-red-500' : 'text-red-500'}`} 
-            />
-          </button>
-          <span className="text-sm text-gray-600">{message.likes}</span>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white border-2 border-red-700 rounded-lg w-full max-w-md max-h-[80vh] overflow-y-auto shadow-xl" onClick={e => e.stopPropagation()}>
+        <div className="p-6 relative">
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-xl text-red-400 font-semibold">À «{receiver}»</h3>
+            <button 
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="mb-6">
+            <p className="mb-4">{contenu}</p>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <p className="text-right italic text-sm">«{sender}»</p>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleHeartClick}
+                className="focus:outline-none transform transition-transform hover:scale-110"
+              >
+                <Heart 
+                  className={`w-6 h-6 transition-colors duration-300 ${isLiked ? 'fill-red-500 text-red-500' : 'text-red-500'}`} 
+                />
+              </button>
+              <span className="text-gray-600">{likes}</span>
+            </div>
+          </div>
+          
+          {showAnimation && <LikeAnimation {...animationPosition} />}
         </div>
       </div>
-      
-      <p className="text-sm mb-4">
-        {message.contenu}
-      </p>
-      
-      <p className="text-right italic text-sm">«{message.sender}»</p>
-      
-      {showAnimation && <LikeAnimation {...animationPosition} />}
     </div>
   );
 };
 
-const Pagination = ({ 
-  currentPage, 
-  totalPages, 
-  onPageChange 
-}: { 
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}) => (
+const MessageCard: React.FC<MessageCardProps> = ({ messageData, onHeartClick, isLiked, isRight }) => {
+  const [showAnimation, setShowAnimation] = useState<boolean>(false);
+  const [animationPosition, setAnimationPosition] = useState<AnimationPosition>({ top: 0, left: 0 });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  
+  const { sender, contenu, receiver, likes } = messageData;
+  
+  const truncatedContent = contenu.length > 100 
+    ? `${contenu.substring(0, 100)}...`
+    : contenu;
+
+  const handleHeartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setAnimationPosition({
+      top: e.clientY - rect.top,
+      left: e.clientX - rect.left,
+    });
+    setShowAnimation(true);
+    onHeartClick();
+    setTimeout(() => setShowAnimation(false), 1000);
+  };
+
+  return (
+    <>
+      <div 
+        className={`relative p-4 bg-pink-50 rounded-lg border-2 border-red-300 w-full max-w-64 shadow-md 
+          hover:shadow-lg transition-all duration-300 cursor-pointer
+          ${isRight ? 'ml-auto' : ''}`}
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="flex justify-between items-start mb-2">
+          <span className="font-semibold text-sm">À «{receiver}»</span>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={handleHeartClick}
+              className="focus:outline-none transform transition-transform hover:scale-110"
+            >
+              <Heart 
+                className={`w-5 h-5 transition-colors duration-300 ${isLiked ? 'fill-red-500 text-red-500' : 'text-red-500'}`} 
+              />
+            </button>
+            <span className="text-sm text-gray-600">{likes}</span>
+          </div>
+        </div>
+        
+        <p className="text-sm mb-4">{truncatedContent}</p>
+        <p className="text-right italic text-sm">«{sender}»</p>
+        
+        {showAnimation && <LikeAnimation {...animationPosition} />}
+      </div>
+
+      <MessageModal
+        messageData={messageData}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        isLiked={isLiked}
+        onHeartClick={onHeartClick}
+      />
+    </>
+  );
+};
+
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => (
   <div className="flex justify-center items-center gap-4 mt-8 mb-4">
     <button
       onClick={() => onPageChange(currentPage - 1)}
@@ -142,58 +308,65 @@ const Pagination = ({
   </div>
 );
 
-const MESSAGES_PER_PAGE = 6; // 2 rangées de 3 messages
+const MESSAGES_PER_PAGE = 6;
 
-const LoveMessagesBoard = ({ activityUuid }: { activityUuid: string }) => {
-  const [messages, setMessages] = useState([]);
+const LoveMessagesBoard: React.FC<{activityUuid: string}> = ({ activityUuid }) => {
+  const [messages, setMessages] = useState<MessageData[]>([]);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [token, setToken] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        setLoading(true);
-        const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
-        const token_ = localStorage.getItem('token');
-        console.log(data);
-        setMessages(data);
-        setToken(token_);
-        const initialLikes = data.reduce((acc, message) => ({
-          ...acc,
-          [message.message_uuid]: false
-        }), {});
-        setLikes(initialLikes);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Une erreur est survenue');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMessages();
+      const fetchMessages = async () => {
+        try {
+          setLoading(true);
+          const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
+          const token_ = localStorage.getItem('token');
+          console.log(data);
+          setMessages(data);
+          setToken(token_);
+          const initialLikes = data.reduce((acc, message) => ({
+            ...acc,
+            [message.message_uuid]: false
+          }), {});
+          setLikes(initialLikes);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchMessages();
   }, [activityUuid]);
 
   const handleHeartClick = async (messageUuid: string) => {
-    if(!token){
-        router.push('/login');
+    // const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
     }
-    setLikes(prev => ({
-      ...prev,
-      [messageUuid]: !prev[messageUuid]
-    }));
-    setMessages(prev => prev.map(msg => 
-      msg.message_uuid === messageUuid 
-        ? { ...msg, likes: msg.likes + (likes[messageUuid] ? -1 : 1) }
-        : msg
-    ));
 
     try {
-      const result = await toogleLike({ token: token.replace(/^"|"$/g, "") , uuid_message: messageUuid });
-      // setLiked(result.liked); 
+      setLoading(true);
+      const result = await toogleLike({ 
+        token: token.replace(/^"|"$/g, ""), 
+        uuid_message: messageUuid 
+      });
+
+      setLikes(prev => ({
+        ...prev,
+        [messageUuid]: !prev[messageUuid]
+      }));
+
+      setMessages(prev => prev.map(msg => 
+        msg.message_uuid === messageUuid 
+          ? { ...msg, likes: msg.likes + (likes[messageUuid] ? -1 : 1) }
+          : msg
+      ));
 
       console.log('Like basculé avec succès :', result);
     } catch (err) {
@@ -205,30 +378,29 @@ const LoveMessagesBoard = ({ activityUuid }: { activityUuid: string }) => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">
-      <p>Chargement des messages...</p>
-    </div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p>Chargement des messages...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex justify-center items-center min-h-screen">
-      <p className="text-red-500">{error}</p>
-    </div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
   }
 
   const totalPages = Math.ceil(messages.length / MESSAGES_PER_PAGE);
   const startIndex = (currentPage - 1) * MESSAGES_PER_PAGE;
   const displayedMessages = messages.slice(startIndex, startIndex + MESSAGES_PER_PAGE);
-  
-  // Organiser les messages en grille 3x2
-  const gridLayout = [
-    displayedMessages.slice(0, 3),
-    displayedMessages.slice(3, 6)
-  ];
 
   return (
-    <div className="relative p-8 mt-12 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
-      {/* Éléments décoratifs */}
+    <div className="relative p-8 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
+      <AnimationStyles />
+      
       {[...Array(15)].map((_, i) => (
         <FloatingBubble key={`bubble-${i}`} delay={i * 2} />
       ))}
@@ -238,19 +410,15 @@ const LoveMessagesBoard = ({ activityUuid }: { activityUuid: string }) => {
       ))}
       
       <div className="relative">
-        <div className="flex flex-col gap-8">
-          {gridLayout.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex flex-wrap justify-between gap-8">
-              {row.map((message, index) => (
-                <div key={message.message_uuid} className="flex-1 flex justify-center">
-                  <MessageCard
-                    message={message}
-                    onHeartClick={() => handleHeartClick(message.message_uuid)}
-                    isLiked={likes[message.message_uuid]}
-                    isRight={index % 2 === 1}
-                  />
-                </div>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {displayedMessages.map((message, index) => (
+            <div key={message.message_uuid} className={index % 2 === 1 ? 'flex justify-end' : 'flex justify-start'}>
+              <MessageCard
+                messageData={message}
+                onHeartClick={() => handleHeartClick(message.message_uuid)}
+                isLiked={likes[message.message_uuid]}
+                isRight={index % 2 === 1}
+              />
             </div>
           ))}
         </div>
@@ -264,42 +432,5 @@ const LoveMessagesBoard = ({ activityUuid }: { activityUuid: string }) => {
     </div>
   );
 };
-
-
-// Styles d'animation globaux à ajouter en CSS
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes float {
-    0% { transform: translateY(100vh); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-100px); opacity: 0; }
-  }
-  
-  @keyframes sideWays {
-    0% { margin-left: 0; }
-    50% { margin-left: 50px; }
-    100% { margin-left: 0; }
-  }
-  
-  @keyframes floatHeart {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-  }
-  
-  @keyframes floatAway {
-    0% { 
-      transform: translate(0, 0) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    100% { 
-      transform: translate(var(--tx, 50px), var(--ty, -50px)) rotate(var(--r, 90deg)) scale(0);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(style);
 
 export default LoveMessagesBoard;
