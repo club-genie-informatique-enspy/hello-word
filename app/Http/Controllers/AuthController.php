@@ -40,13 +40,13 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Inscription réussie',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => $user->role,
-            ]
+            ],
+            'token' => $user->createToken('auth_token')->plainTextToken,
         ], 201);
 
     } catch (ValidationException $e) {
@@ -60,7 +60,7 @@ class AuthController extends Controller
             'details' => $e->getMessage()
         ], 500);
     }
-}    
+}
 
     // Connexion
     // Connexion
