@@ -49,6 +49,8 @@
 @layer base {
   * {
     @apply border-border;
+    padding: 0;
+    margin: 0;
   }
 
   body {
