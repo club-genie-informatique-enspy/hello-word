@@ -13,7 +13,7 @@ export async function getAllArticles(): Promise<Article[]> {
 
 export async function getAllRubriques(): Promise<Rubrique[]> {
   // Route mise à jour pour lister tous les articles
-  return fetchAPI('/rubrique');
+  return fetchAPI('/rubriques');
 }
 
 

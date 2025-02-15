@@ -5,10 +5,11 @@ import ArticlesList from "@/components/v2/ArticlesList";
 import { getAllRubriques } from "@/app/lib/article";
 import Sidebar from "@/components/v2/Sidebar";
 import { Search } from "lucide-react";
+import { Rubrique } from "@/type";
 
 export default function ForYouPage() {
   const [selectedRubriqueId, setSelectedRubriqueId] = useState<string | null>(null);
-  const [_rubriques, setRubriques] = useState([]);
+  const [_rubriques, setRubriques] = useState<Rubrique[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
@@ -27,11 +28,11 @@ export default function ForYouPage() {
     fetchRubriques();
   }, []);
   const rubriques = [
-    { rubrique_uuid: "1", nom: "Technology" },
-    { rubrique_uuid: "2", nom: "Environment" },
-    { rubrique_uuid: "3", nom: "Fashion" },
-    { rubrique_uuid: "4", nom: "Energy" },
-    { rubrique_uuid: "5", nom: "Lifestyle" },
+    { rubrique_uuid: "1", titre: "Technology" },
+    { rubrique_uuid: "2", titre: "Environment" },
+    { rubrique_uuid: "3", titre: "Fashion" },
+    { rubrique_uuid: "4", titre: "Energy" },
+    { rubrique_uuid: "5", titre: "Lifestyle" },
   ];
 
   return (
@@ -71,7 +72,7 @@ export default function ForYouPage() {
             >
               All
             </button>
-            {rubriques.map(rubrique => (
+            {_rubriques.map(rubrique => (
               <button
                 key={rubrique.rubrique_uuid}
                 className={`px-4 py-2 rounded-full ${
@@ -79,7 +80,7 @@ export default function ForYouPage() {
                 }`}
                 onClick={() => setSelectedRubriqueId(rubrique.rubrique_uuid)}
               >
-                {rubrique.nom}
+                {rubrique.titre}
               </button>
             ))}
           </div>
