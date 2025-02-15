@@ -19,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Home | Open Blog",
-  description: "The Open Blog is a open source template is design and built with Next.js 15, Shadcn UI and tailwind CSS.",
+  title: "Home | Hello World",
+  description: "Le journal du pipo par le pipo et pour le pipo.",
 };
 
 export default function RootLayout({
@@ -39,13 +39,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
 
-          {/* <Header /> */}
+          <Header />
 
           <main className="flex-grow">{children}</main>
 
-          {/* <Footer /> */}
+          <Footer />
           
-        </ThemeProvider>
+       </ThemeProvider>
         {/* </AuthProvider> */}
       </body>
     </html>

@@ -23,10 +23,10 @@ const Header: FC = () => {
         RISE<span className="text-blue-600">BLOG</span>
       </div>
       <nav className="flex items-center gap-4">
-        <Link href="/" className="hover:text-blue-600">Home</Link>
-        <Link href="/articles" className="text-blue-600">Article</Link>
-        <Link href="/about" className="hover:text-blue-600">About</Link>
-        <Link href="/contact" className="hover:text-blue-600">Contact</Link>
+        <Link href="/v2" className="hover:text-blue-600">Home</Link>
+        <Link href="/v2/articles" className="text-blue-600">Article</Link>
+        <Link href="/v2" className="hover:text-blue-600">About</Link>
+        <Link href="/v2" className="hover:text-blue-600">Contact</Link>
         <button aria-label="Search" className="p-2">
           <Search size={20} />
         </button>

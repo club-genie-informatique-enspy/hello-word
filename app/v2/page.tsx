@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { ArrowLeft, ArrowRight, Search } from 'lucide-react';
 
 const topics = [
@@ -60,21 +61,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="px-8 py-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <span className="font-bold text-xl">RISE</span>
-          <span className="text-blue-600 text-xl">BLOG</span>
-        </div>
-        <nav className="flex items-center space-x-6">
-          <Link href="/" className="text-blue-600">Home</Link>
-          <Link href="/articles" className="text-gray-600 hover:text-blue-600">Articles</Link>
-          <Link href="/about" className="text-gray-600 hover:text-blue-600">About</Link>
-          <Link href="/contact" className="text-gray-600 hover:text-blue-600">Contact</Link>
-          <Search className="w-5 h-5 text-gray-600" />
-        </nav>
-      </header>
-
       {/* Hero Section */}
       <section className="px-8 py-16 relative overflow-hidden">
         <div className="max-w-6xl mx-auto relative z-10">
@@ -199,11 +185,6 @@ export default function HomePage() {
           <div className="absolute -bottom-8 -right-8 w-32 h-32 border-8 border-blue-600 rounded-full opacity-10" />
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="px-8 py-4 text-center text-sm text-gray-500 border-t">
-        © 2022 RiseBlog. All rights reserved
-      </footer>
     </div>
   );
 }
