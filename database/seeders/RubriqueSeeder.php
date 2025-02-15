@@ -34,12 +34,7 @@ class RubriqueSeeder extends Seeder
                 'description' => 'Rubrique dédiée aux jeux vidéo, jeux de société et autres loisirs divers.',
                 'image' => 'path_to_image_jeux.jpg', // Remplacer par le chemin réel de l’image
             ],
-            [
-                'rubrique_uuid' => Str::uuid(),
-                'titre' => 'Regards sur le monde',
-                'description' => 'Les dernières actualités mondiales, analyses et réflexions sur les événements internationaux.',
-                'image' => 'path_to_image_monde.jpg', // Remplacer par le chemin réel de l’image
-            ],
+            
         ];
 
         // Insérer chaque rubrique dans la base de données
