@@ -1,3 +1,4 @@
+import { Article, Rubrique } from "@/type";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -9,6 +10,11 @@ import { Message } from "@/types/messages";
 export async function getAllArticles(): Promise<Article[]> {
   // Route mise à jour pour lister tous les articles
   return fetchAPI('/article');
+}
+
+export async function getAllRubriques(): Promise<Rubrique[]> {
+  // Route mise à jour pour lister tous les articles
+  return fetchAPI('/rubriques');
 }
 
 

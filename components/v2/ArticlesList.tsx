@@ -37,7 +37,7 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
         <ArticleCard
           key={article.article_uuid}
           article = {article}
-          comments ={article.comments}
+          comments ={0}
         />
       ))}
     </div>

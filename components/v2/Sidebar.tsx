@@ -6,7 +6,7 @@ const Sidebar = () => {
         title: "How Will AI Image Generators Affect Artists?",
         author: {
           name: "Ray",
-          avatar: "/api/placeholder/32/32"
+          avatar: "/images/logo-light-2.png"
         },
         tags: ["AI", "Tech"]
       },
@@ -16,12 +16,12 @@ const Sidebar = () => {
       {
         id: 1,
         name: "Joana Marie Jones",
-        avatar: "/api/placeholder/32/32"
+        avatar: "/images/logo-light-2.png"
       },
       {
         id: 2,
         name: "Jousef Hanafi",
-        avatar: "/api/placeholder/32/32"
+        avatar: "/images/logo-light-2.png"
       },
     ];
   
@@ -36,7 +36,7 @@ const Sidebar = () => {
                 <img
                   src={article.author.avatar}
                   alt={article.author.name}
-                  className="w-12 h-12 rounded-lg object-cover"
+                  className="h-12 object-cover"
                 />
                 <div>
                   <h3 className="font-medium text-sm">{article.title}</h3>
@@ -63,7 +63,7 @@ const Sidebar = () => {
                   <img
                     src={user.avatar}
                     alt={user.name}
-                    className="w-10 h-10 rounded-full"
+                    className="h-10"
                   />
                   <span className="font-medium">{user.name}</span>
                 </div>

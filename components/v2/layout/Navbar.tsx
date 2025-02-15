@@ -38,6 +38,9 @@ export const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-8">
+                        <Link href="/v2" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                            Accueil
+                        </Link>
                         <Link href="/v2/articles" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             Articles
                         </Link>
@@ -47,9 +50,7 @@ export const Navbar = () => {
                         <Link href="/v2/about" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             À propos
                         </Link>
-                        <Link href="/v2/contact" className="text-gray-700 hover:text-[#FF9100] transition-colors">
-                            Contact
-                        </Link>
+                        
 
                         {/* Profile/Sign in Button - Desktop */}
                         {session ? (
@@ -86,7 +87,7 @@ export const Navbar = () => {
                             </div>
                         ) : (
                             <button
-                                onClick={() => redirect('/v2/register')}
+                                onClick={() => redirect('/register')}
                                 className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
                             >
                                 Sign in
@@ -173,7 +174,7 @@ export const Navbar = () => {
                             ) : (
                                 <button
                                     onClick={() => {
-                                        redirect('/v2/register');
+                                        redirect('/register');
                                     }}
                                     className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
                                 >

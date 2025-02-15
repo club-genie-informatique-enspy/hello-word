@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Heart, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMessages } from '@/app/lib/article';
@@ -272,7 +273,7 @@ const MessageCard: React.FC<MessageCardProps> = ({ messageData, onHeartClick, is
 };
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => (
-  <div className="flex justify-center items-center gap-4 mt-8 mb-4">
+  <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 mt-8 mb-4">
     <button
       onClick={() => onPageChange(currentPage - 1)}
       disabled={currentPage === 1}
@@ -280,13 +281,13 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
     >
       <ChevronLeft className="w-6 h-6" />
     </button>
-    
-    <div className="flex gap-2">
+
+    <div className="flex flex-wrap justify-center gap-2">
       {[...Array(totalPages)].map((_, index) => (
         <button
           key={index + 1}
           onClick={() => onPageChange(index + 1)}
-          className={`w-8 h-8 rounded-full ${
+          className={`min-w-8 h-8 px-2 rounded-full ${
             currentPage === index + 1
               ? 'bg-pink-500 text-white'
               : 'bg-pink-100 hover:bg-pink-200'
@@ -306,6 +307,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
     </button>
   </div>
 );
+
 
 const MESSAGES_PER_PAGE = 6;
 
@@ -397,7 +399,7 @@ const LoveMessagesBoard: React.FC = () => {
   const displayedMessages = messages.slice(startIndex, startIndex + MESSAGES_PER_PAGE);
 
   return (
-    <div className="relative p-8 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
+    <div className="relative mt-16 p-8 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
       <AnimationStyles />
       
       {[...Array(15)].map((_, i) => (

@@ -10,20 +10,23 @@ export interface Posts {
   slug : string;
 }
 
-  export interface Article {
-    article_uuid: string;
-    image: string;
-    contenu: string;
-    titre: string;
-    slug: string;
-    user_id: number;
-    auteur: string;
-    source: string;
-    nb_vues: number;
-    likes: number;
-    created_at: Date;
-    updated_at: Date;
-  }
+
+interface Article {
+  article_uuid: string;
+  user_id: number;
+  titre: string;
+  contenu: string;
+  image: string;
+  source: string;
+  nb_vues: number;
+  likes: string; // Si `likes` est un nombre, remplacez `string` par `number`
+  slug: string;
+  created_at: string; 
+  updated_at: string; 
+  slogan: string;
+  auteur:string;
+  rubrique_uuid: string;
+}
 
   export interface Commentaire {
     commentaire_uuid: string;
@@ -73,3 +76,11 @@ export interface crushMessage{
 
 }
 
+export interface Rubrique{
+  rubrique_uuid:string,
+  description:string,
+  titre:string,
+  image?:string,
+  created_at:Date,
+  updated_at:Date,
+}

@@ -68,7 +68,7 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mt-16 mx-auto p-4">
 
     {/* Main Content */}
     <div className="grid grid-cols-12 gap-8">
@@ -130,7 +130,7 @@ export default function BlogPage() {
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gray-200 rounded-full" />
               <div>
-                <p className="font-medium">Joana Marie Jones</p>
+                <p className="font-medium">{post.auteur}</p>
                 <div className="flex items-center text-sm text-gray-500">
                   <span>Follow</span>
                 </div>
@@ -163,22 +163,17 @@ export default function BlogPage() {
             <img 
               src={post.image}
               alt="Neuralink logo" 
-              className="w-full rounded-lg"
+              className="w-min rounded-lg"
             />
             <p className="text-sm text-gray-500 mt-2">
-              Neuralink logo displayed on a phone screen, a silhouette of a human face and a binary code
-              displayed on a screen are seen in this multiple exposure illustration photo taken in Krakow, Poland on December 10, 2021.
+              {post.slogan}
             </p>
           </div>
 
           {/* Article content */}
           <div className="prose max-w-none">
             <p>
-              Elon Musk shows off updates to his brain chips and says he's going to install
-              one in himself when they are ready. Elon Musk's health tech venture Neuralink
-              shared updates to its brain-implant technology during a "show and tell"
-              recruitment event Wednesday night. Musk said during the event that he plans
-              to get one of the implants himself.
+              {post.contenu}
             </p>
             {/* Add more paragraphs */}
           </div>
@@ -188,7 +183,7 @@ export default function BlogPage() {
 
     {/* Footer */}
     <footer className="mt-12 py-4 text-center text-sm text-gray-500">
-      © 2022 RiseBlog. All rights reserved
+      © 2025 Hello World. All rights reserved.
     </footer>
   </div>
   );
