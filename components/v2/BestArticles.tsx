@@ -2,13 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, MessageCircle } from 'lucide-react';
 import { redirect } from "next/navigation";
 
-interface Article {
-    title: string;
-    image: string;
-    likes: number;
-    comments: number;
-    category: string;
-}
 
 interface BestArticlesProps {
     articles: Article[];
@@ -81,9 +74,9 @@ const BestArticles: React.FC<BestArticlesProps> = ({
 
     const getCategoryColor = (category: string): string => {
         const colors: { [key: string]: string } = {
-            Technology: 'bg-purple-100 text-purple-700',
-            Environment: 'bg-green-100 text-green-700',
-            Business: 'bg-blue-100 text-blue-700'
+            "9450301b-0408-480e-8fd3-14e03f22003d" : 'bg-purple-100 text-purple-700',
+            "0554fc53-4acf-42ac-bb9b-82c801c7b606": 'bg-green-100 text-green-700',
+            "f12bae66-f1d7-4c40-b1d3-017ce4de1713": 'bg-blue-100 text-blue-700'
         };
         return colors[category] || 'bg-gray-100 text-gray-700';
     };
@@ -134,18 +127,18 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                                 <div className="relative h-48 overflow-hidden">
                                     <img
                                         src={article.image}
-                                        alt={article.title}
+                                        alt={article.titre}
                                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                                     />
                                     <div className="absolute top-4 left-4">
-                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(article.category)}`}>
-                                            {article.category}
+                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(article.rubrique_uuid)}`}>
+                                            Inedit
                                         </span>
                                     </div>
                                 </div>
                                 <div className="p-4 sm:p-6">
                                     <h3 className="font-semibold text-lg mb-4 text-gray-800 line-clamp-2 hover:line-clamp-none transition-all">
-                                        {article.title}
+                                        {article.titre}
                                     </h3>
                                     <div className="flex justify-between justify-self-bottom items-center text-sm">
                                         <div className="flex gap-4 text-gray-500">
@@ -155,7 +148,7 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                                             </span>
                                             <span className="flex items-center gap-1.5 group">
                                                 <MessageCircle className="w-4 h-4 group-hover:text-blue-500 transition-colors" />
-                                                {article.comments}
+                                                {0}
                                             </span>
                                         </div>
                                         <button className="text-orange-500 hover:text-blue-700 font-medium focus:outline-none focus:underline">

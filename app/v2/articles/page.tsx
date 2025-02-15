@@ -16,8 +16,7 @@ export default function ForYouPage() {
     async function fetchRubriques() {
       try {
         const fetchedRubriques = await getAllRubriques(); 
-        console.log(fetchRubriques)
-        setRubriques(_rubriques);
+        setRubriques(fetchedRubriques);
       } catch (error) {
         console.error("Erreur lors du chargement des Rubriques:", error);
       } finally {
@@ -27,14 +26,7 @@ export default function ForYouPage() {
 
     fetchRubriques();
   }, []);
-  const rubriques = [
-    { rubrique_uuid: "1", titre: "Technology" },
-    { rubrique_uuid: "2", titre: "Environment" },
-    { rubrique_uuid: "3", titre: "Fashion" },
-    { rubrique_uuid: "4", titre: "Energy" },
-    { rubrique_uuid: "5", titre: "Lifestyle" },
-  ];
-
+console.log(_rubriques);
   return (
     <div className="min-h-screen bg-gray-50 mt-16">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -1,12 +1,13 @@
 // app/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import TopicsCarousel from "@/components/TopicsCarousel";
 import BestArticles from "@/components/v2/BestArticles";
 import AnimatedCounter from "@/components/v2/AnimatedCounter"
+import { getAllArticles } from '../lib/article';
 
 const articles = [
   {
@@ -62,7 +63,24 @@ const articles = [
 
 export default function HomePage() {
   const [email, setEmail] = useState('');
-
+  const [articles, setArticles] = useState<Article[]>([]);
+      const [loading, setLoading] = useState<boolean>(true);
+      const [error, setError] = useState<string | null>(null);
+      const [isLoading, setIsLoading] = useState<boolean>(true);
+    useEffect(() => {
+      async function fetchArticles() {
+        try {
+          const fetchedArticles = await getAllArticles(); 
+          setArticles(fetchedArticles);
+        } catch (error) {
+          console.error("Erreur lors du chargement des articles:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+  
+      fetchArticles();
+    }, []);
   return (
     <div className="min-h-screen bg-gray-50">
     

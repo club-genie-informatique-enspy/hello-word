@@ -266,7 +266,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mt-16 mx-auto p-6">
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-2xl">Dashboard Administrateur</CardTitle>

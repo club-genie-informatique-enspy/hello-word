@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 import { LikeAnimation } from "@/components/v2/messages/LikeAnimation";
+
 export const MessageCard = ({ message, onHeartClick, isLiked, likeCount, isRight }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [animationPosition, setAnimationPosition] = useState({ top: 0, left: 0 });
@@ -16,7 +17,7 @@ export const MessageCard = ({ message, onHeartClick, isLiked, likeCount, isRight
   };
 
   return (
-    <div className={`relative p-4 bg-pink-50 rounded-lg border-2 border-red-300 w-64 shadow-md 
+    <div className={`relative mt-16 p-4 bg-pink-50 rounded-lg border-2 border-red-300 w-64 shadow-md 
       hover:shadow-lg transition-shadow duration-300
       ${isRight ? 'ml-auto' : ''}`}
     >
