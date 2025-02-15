@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import { getAllActivities } from "@/app/lib/activity";
-import { getMessages } from "../lib/crush-messages";
+import { getAllMessages } from "../lib/crush-messages";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { CrushMessageCard } from "@/components/crushMessageCard";
@@ -19,7 +19,7 @@ const [activity, setActivity] = useState<Activity | null>(null);
       const activities: Activity[] = await getAllActivities();
       if (activities.length > 0) {
         setActivity(activities[0]);
-        const messages = await getMessages(activities[0].activity_uuid);
+        const messages = await getAllMessages(activities[0].activity_uuid);
         const sortedMessages = messages.sort((a, b) => b.likes - a.likes).slice(0, 4);
         setTopMessages(sortedMessages);
       }

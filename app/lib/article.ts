@@ -4,6 +4,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 import { fetchAPI } from "./api";         
+import { Message } from "@/types/messages";
 
 
 export async function getAllArticles(): Promise<Article[]> {
@@ -63,7 +64,6 @@ export async function deleteArticle(uuid: string): Promise<void> {
     method: 'DELETE',
   });
 }
-export async function getMessages(uuid: string): Promise<Article> {
-  // Route mise à jour pour obtenir un article spécifique par uuid
+export async function getMessages(uuid: string): Promise<Message[]> {
   return fetchAPI(`/messages/${uuid}`);
 }
