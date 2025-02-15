@@ -227,7 +227,7 @@ const LoveMessagesBoard = ({ activityUuid }: { activityUuid: string }) => {
   ];
 
   return (
-    <div className="relative p-8 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
+    <div className="relative p-8 mt-12 bg-white border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
       {/* Éléments décoratifs */}
       {[...Array(15)].map((_, i) => (
         <FloatingBubble key={`bubble-${i}`} delay={i * 2} />

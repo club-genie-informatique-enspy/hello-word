@@ -1,5 +1,5 @@
 import HomeContent from "./HomeContent";
-import HomePage from "./v2/Page.tsx"
+import HomePage from "./v2/page"
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

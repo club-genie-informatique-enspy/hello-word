@@ -108,9 +108,9 @@ const Footer = () => {
 
                 {/* Bas de page */}
                 <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-                    <p className="text-gray-600">
-                        © {new Date().getFullYear()} Journal Universitaire <h6 className="text-[#FF9100]">Hello-World</h6>. Tous droits réservés.
-                    </p>
+                    <h6 className="text-gray-600">
+                        © {new Date().getFullYear()} Journal Universitaire <p className="text-[#FF9100]">Hello-World</p>. Tous droits réservés.
+                    </h6>
                 </div>
             </div>
         </footer>
