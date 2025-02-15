@@ -32,12 +32,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         {/* <AuthProvider> */}
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        > */}
 
           {/* <Header /> */}
 
@@ -45,7 +45,7 @@ export default function RootLayout({
 
           {/* <Footer /> */}
           
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
         {/* </AuthProvider> */}
       </body>
     </html>

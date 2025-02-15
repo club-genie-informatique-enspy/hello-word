@@ -59,7 +59,7 @@ export default function ForYouPage() {
                 className={`px-4 py-2 rounded-full ${
                   selectedRubriqueId === rubrique.id ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => setSelectedRubriqueId(rubrique.id)}
+                onClick={() => setSelectedRubriqueId(rubrique.article_uuid)}
               >
                 {rubrique.nom}
               </button>

@@ -1,27 +1,22 @@
-// app/register/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { useAuth } from "../provider/auth-provider"
-import { registerUser } from "../lib/auth"
+import { useAuth } from "@/hooks/auth"
 import Link from "next/link"
-import Error from "next/error"
 import { validateEmail } from "../lib/utils"
 import { UserData } from "@/type"
 
-
-
 export default function RegisterPage() {
-  const { login, user } = useAuth()
   const router = useRouter()
-  const [error, setError] = useState("")
+  const { registerUser } = useAuth({ middleware: 'guest', redirectIfAuthenticated: '/' })
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,66 +24,55 @@ export default function RegisterPage() {
     confirmPassword: "",
   })
 
-  useEffect(() => {
-    if (user) {
-      router.push("/")
-      router.refresh()
-    }
-  }, [user, router])
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-  
-    // Validation de l'email
+    e.preventDefault()
+    setIsLoading(true)
+    setErrors({})
+
+    // Validations locales
+    const validationErrors: { [key: string]: string[] } = {}
+
     if (!validateEmail(formData.email)) {
-      setError("L'email n'est pas valide");
-      setIsLoading(false);
-      return;
+      validationErrors.email = ["L'email n'est pas valide"]
     }
-  
+
     if (formData.password !== formData.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas");
-      setIsLoading(false);
-      return;
+      validationErrors.confirmPassword = ["Les mots de passe ne correspondent pas"]
     }
-    
+
     if (!formData.name || !formData.email || !formData.password) {
-      setError("Tous les champs sont obligatoires.");
-      setIsLoading(false);
-      return;
+      validationErrors.general = ["Tous les champs sont obligatoires"]
     }
-    
+
     if (formData.password.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caractères.");
-      setIsLoading(false);
-      return;
+      validationErrors.password = ["Le mot de passe doit contenir au moins 6 caractères"]
     }
-  
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      setIsLoading(false)
+      return
+    }
+
     try {
-      
       const userData: UserData = {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         role: "user"
-      };
-      
-      await registerUser(userData);
-  
-      // Rediriger vers la page de connexion
-      await login({ email: formData.email, password: formData.password });
-  
-      router.push("/");
-      router.refresh();
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      setError(error.message || "Erreur lors de l'inscription.");
+      }
+
+      await registerUser({
+        ...userData,
+        setErrors,
+      })
+    } catch (error) {
+      // Les erreurs sont gérées par le hook useAuth
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
+
   if (isLoading) {
     return (
       <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-200px)]">
@@ -121,6 +105,11 @@ export default function RegisterPage() {
                 }
                 required
               />
+              {errors.name && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.name[0]}
+                </Badge>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -135,6 +124,11 @@ export default function RegisterPage() {
                 }
                 required
               />
+              {errors.email && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.email[0]}
+                </Badge>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -149,6 +143,11 @@ export default function RegisterPage() {
                 }
                 required
               />
+              {errors.password && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.password[0]}
+                </Badge>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -163,12 +162,17 @@ export default function RegisterPage() {
                 }
                 required
               />
+              {errors.confirmPassword && (
+                <Badge variant="destructive" className="mt-1">
+                  {errors.confirmPassword[0]}
+                </Badge>
+              )}
             </div>
 
-            {error && (
+            {errors.general && (
               <div className="flex justify-center">
                 <Badge variant="destructive" className="text-sm">
-                  {error}
+                  {errors.general[0]}
                 </Badge>
               </div>
             )}
@@ -177,11 +181,11 @@ export default function RegisterPage() {
               S'inscrire
             </Button>
             <div className="text-center mt-4">
-              <span className="text-gray-600">Deja un compte ? </span>
+              <span className="text-gray-600">Déjà un compte ? </span>
               <Link href="/login" className="text-blue-600 hover:underline">
                 Connectez vous
               </Link>
-        </div>
+            </div>
           </form>
         </CardContent>
       </Card>

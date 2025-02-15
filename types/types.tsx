@@ -15,4 +15,37 @@ interface ArticleCardProps {
     image?: string;
     stats: ArticleStats;
   }
+
+  interface Article {
+    article_uuid: string;
+    user_id: number;
+    titre: string;
+    contenu: string;
+    image: string;
+    source: string;
+    nb_vues: number;
+    likes: string; // Si `likes` est un nombre, remplacez `string` par `number`
+    slug: string;
+    created_at: string; 
+    updated_at: string; 
+    slogan: string;
+    rubrique_uuid: string;
+  }
   
+  interface User {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  }
+  interface UserData {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+  }
+  
+  interface DataToLogin {
+    email: string;
+    password: string;
+  }

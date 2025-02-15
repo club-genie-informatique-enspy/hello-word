@@ -63,3 +63,7 @@ export async function deleteArticle(uuid: string): Promise<void> {
     method: 'DELETE',
   });
 }
+export async function getMessages(uuid: string): Promise<Article> {
+  // Route mise à jour pour obtenir un article spécifique par uuid
+  return fetchAPI(`/messages/${uuid}`);
+}
