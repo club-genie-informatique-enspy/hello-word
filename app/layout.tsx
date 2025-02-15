@@ -33,7 +33,7 @@ export default function RootLayout({
         {/* <AuthProvider> */}
           <main className="flex-grow">
               <SessionProviderWrapper>
-                <Navbar />
+                {/* <Navbar /> */}
                 {children}
                 </SessionProviderWrapper>
           </main>
