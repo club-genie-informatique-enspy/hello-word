@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "./globals.css";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/theme/theme-provider"
-import { AuthProvider } from "./provider/auth-provider";
+import SessionProviderWrapper from "@/components/v2/SessionProviderWrapper";
+import { Navbar } from "@/components/v2/layout/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,20 +31,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         {/* <AuthProvider> */}
-        {/* <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        > */}
-
-          {/* <Header /> */}
-
-          <main className="flex-grow">{children}</main>
-
-          {/* <Footer /> */}
-          
-        {/* </ThemeProvider> */}
+          <main className="flex-grow">
+              <SessionProviderWrapper>
+                <Navbar />
+                {children}
+                </SessionProviderWrapper>
+          </main>
         {/* </AuthProvider> */}
       </body>
     </html>
