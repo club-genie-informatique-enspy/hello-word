@@ -53,13 +53,30 @@ public function store(Request $request, string $article_uuid)
         return new CommentaireResource(Commentaire::findByUuid($uuid));
     }
 
-    public function update(CommentaireRequest $request, string $article_uuid, string $uuid)
+    public function update(Request $request,  string $uuid)
     {
-        $validated = $request->validated();
-        $comment = Commentaire::findByUuid($uuid);
-        $model = $comment;
-        $model->update($validated);
-        return new CommentaireResource($model);
+      
+
+        // Trouver le commentaire
+        $commentaire = Commentaire::findByUuid($uuid);
+        if (!$commentaire) {
+            return response()->json(['message' => 'Commentaire non trouvé'], 404);
+        }
+
+        // Vérifier que l'utilisateur est propriétaire du commentaire ou est admin
+        if (Auth::id() !== $commentaire->user_id && !Auth::user()->role=='admin') {
+            return response()->json(['message' => 'Non autorisé à modifier ce commentaire'], 403);
+        }
+
+        // Valider les données
+        $validated = $request->validate([
+            'contenu' => 'required|string'
+        ]);
+
+        // Mise à jour du commentaire
+        $commentaire->update($validated);
+
+        return new CommentaireResource($commentaire);
     }
 
     public function destroy(string $uuid)

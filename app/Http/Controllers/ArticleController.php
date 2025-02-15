@@ -29,7 +29,6 @@ class ArticleController extends Controller
             'user_id' => 'required|exists:users,id',
             'auteur' => 'required|string|max:255',
             'source' => 'required|string|max:255',
-            'nb_vues' => 'required|integer',
             'slogan'=>'required|string',
         ]);
     
@@ -50,6 +49,7 @@ class ArticleController extends Controller
         // Ajout des champs supplémentaires
         $validated['article_uuid'] = Str::uuid();
         $validated['rubrique_uuid'] = $rubrique->rubrique_uuid;
+        $validates['nb_vues'] = 0;
     
         // Créer l'article
         $article = Article::create($validated);
@@ -64,13 +64,41 @@ class ArticleController extends Controller
         return new ArticleResource($model);
     }
 
-    public function update(ArticleRequest $request, string $uuid)
+    
+    public function update(Request $request, string $uuid)
     {
-        $model = Article::findByUuid($uuid);
-        $validated = $request->validated();
-        $model = $model->update($validated);
-        return response()->json($model, 201);
+        // Trouver l'article
+        $article = Article::findByUuid($uuid);
+        if (!$article) {
+            return response()->json(['message' => 'Article non trouvé'], 404);
+        }
+    
+        // Valider les données
+        $validated = $request->validate([
+            'titre' => 'sometimes|string|max:255',
+            'contenu' => 'sometimes|string',
+            'slug' => 'sometimes|string',
+            'auteur' => 'sometimes|string|max:255',
+            'source' => 'sometimes|string|max:255',
+            'rubrique_uuid' => 'sometimes|string|exists:rubriques,rubrique_uuid',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'slogan' => 'sometimes|string',
+        ]);
+    
+        // Traitement de l'image si elle est fournie
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('storage/uploads/articles/images'), $imageName);
+            $validated['image'] = asset('storage/uploads/articles/images/' . $imageName);
+        }
+    
+        // Mise à jour de l'article
+        $article->update($validated);
+    
+        return new ArticleResource($article);
     }
+    
 
     public function destroy(string $uuid)
     {
