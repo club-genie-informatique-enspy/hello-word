@@ -78,7 +78,7 @@ export const Navbar = () => {
                             </div>
                         ) : (
                             <button
-                                onClick={() => redirect('/v2/register')}
+                                onClick={() => redirect('/register')}
                                 className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
                             >
                                 Sign in
@@ -165,7 +165,7 @@ export const Navbar = () => {
                             ) : (
                                 <button
                                     onClick={() => {
-                                        redirect('/v2/register');
+                                        redirect('/register');
                                     }}
                                     className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
                                 >

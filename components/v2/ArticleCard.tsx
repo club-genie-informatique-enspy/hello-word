@@ -1,18 +1,10 @@
 import { Heart, MessageSquare } from 'lucide-react';
 import { FC } from 'react';
 import Link from 'next/link';
+import { Article } from '@/type';
 
 interface ArticleCardProps {
-  article: {
-    article_uuid: string;
-    titre: string;
-    slogan: string;
-    image?: string;
-    auteur: string;
-    avatar: string;
-    source: string;
-    likes: number;
-  };
+  article: Article;
   comments: number;
 }
 
@@ -39,7 +31,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, comments }) => {
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span>{article.likes} <Heart className="inline w-4 h-4" /></span>
-              <span>Comment <MessageSquare className="inline w-4 h-4" />--</span>
+              <span>Comments <MessageSquare className="inline w-4 h-4" />{comments}</span>
             </div>
           </div>
         </div>

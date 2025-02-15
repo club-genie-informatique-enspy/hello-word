@@ -13,6 +13,7 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
     async function fetchArticles() {
       try {
         const fetchedArticles = await getAllArticles(); 
+        console.log(fetchArticles)
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Erreur lors du chargement des articles:", error);
@@ -37,7 +38,7 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
         <ArticleCard
           key={article.article_uuid}
           article = {article}
-          comments ={article.comments}
+          comments ={0}
         />
       ))}
     </div>
