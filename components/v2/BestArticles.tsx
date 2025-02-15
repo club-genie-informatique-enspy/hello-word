@@ -96,8 +96,8 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                         Best Article Today
                     </h2>
                     <button
-                        className="px-6 py-3 bg-white text-blue-600 rounded-full hover:bg-gray-50 transition-colors duration-200 shadow-lg hover:shadow-xl"
-                        onClick={() => redirect('/articles')}
+                        className="px-6 py-3 bg-white text-orange-500 rounded-full hover:bg-gray-50 transition-colors duration-200 shadow-lg hover:shadow-xl"
+                        onClick={() => redirect('/v2/articles')}
                     >
                         See All Articles
                     </button>
@@ -114,7 +114,7 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             aria-label="Scroll left"
                         >
-                            <ChevronLeft className="w-6 h-6 text-blue-600" />
+                            <ChevronLeft className="w-6 h-6 text-orange-500" />
                         </button>
                     )}
 
@@ -147,7 +147,7 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                                     <h3 className="font-semibold text-lg mb-4 text-gray-800 line-clamp-2 hover:line-clamp-none transition-all">
                                         {article.title}
                                     </h3>
-                                    <div className="flex justify-between items-center text-sm">
+                                    <div className="flex justify-between justify-self-bottom items-center text-sm">
                                         <div className="flex gap-4 text-gray-500">
                                             <span className="flex items-center gap-1.5 group">
                                                 <Heart className="w-4 h-4 group-hover:text-red-500 transition-colors" />
@@ -158,7 +158,7 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                                                 {article.comments}
                                             </span>
                                         </div>
-                                        <button className="text-blue-600 hover:text-blue-700 font-medium focus:outline-none focus:underline">
+                                        <button className="text-orange-500 hover:text-blue-700 font-medium focus:outline-none focus:underline">
                                             Read More
                                         </button>
                                     </div>
@@ -173,7 +173,7 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             aria-label="Scroll right"
                         >
-                            <ChevronRight className="w-6 h-6 text-blue-600" />
+                            <ChevronRight className="w-6 h-6 text-orange-500" />
                         </button>
                     )}
                 </div>

@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="container mx-auto mt-16 flex items-center justify-center min-h-[calc(100vh-200px)]">
         <Card className="w-full max-w-md p-6">
           <div className="text-center">Connexion en cours...</div>
         </Card>

@@ -68,11 +68,11 @@ const MessageCard = ({ message, onHeartClick, isLiked, likeCount, isRight }) => 
   };
 
   return (
-    <div className={`relative p-4 bg-pink-50 rounded-lg border-2 border-red-300 w-64 shadow-md 
+    <div className={`relative p-4 bg-pink-50 rounded-lg h-auto border-2 border-red-300 w-64 shadow-md 
       hover:shadow-lg transition-shadow duration-300
       ${isRight ? 'ml-auto' : ''}`}
     >
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex  justify-between items-start mb-2">
         <span className="font-semibold">À «{message.receiver}»</span>
         <div className="flex items-center gap-2">
           <button 

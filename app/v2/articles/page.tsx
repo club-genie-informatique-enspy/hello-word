@@ -21,7 +21,7 @@ export default function ForYouPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-blue-600">For you</h1>
+          <h1 className="text-3xl font-bold ">For you</h1>
           <button className="flex md:hidden bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors ml-4">
             Create Account
           </button>
@@ -38,7 +38,7 @@ export default function ForYouPage() {
                 className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button className="hidden md:block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors ml-4">
+            <button className="hidden md:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-700 transition-colors ml-4">
               Create Account
             </button>
           </div>
@@ -47,7 +47,7 @@ export default function ForYouPage() {
           <div className="flex gap-4 overflow-x-auto pb-2">
             <button
               className={`px-4 py-2 rounded-full ${
-                selectedRubriqueId === null ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                selectedRubriqueId === null ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
               onClick={() => setSelectedRubriqueId(null)}
             >
@@ -57,7 +57,7 @@ export default function ForYouPage() {
               <button
                 key={rubrique.id}
                 className={`px-4 py-2 rounded-full ${
-                  selectedRubriqueId === rubrique.id ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  selectedRubriqueId === rubrique.id ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
                 onClick={() => setSelectedRubriqueId(rubrique.id)}
               >
