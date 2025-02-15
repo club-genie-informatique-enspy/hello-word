@@ -3,32 +3,31 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from "next/image";
 
 type Topic = {
-    id: number;
-    title: string;
+    rubrique_uuid: string;
+    titre: string;
     image: string;
-    category: string;
+    description: string;
 };
 
 const topics: Topic[] = [
-    {
-        id: 1,
-        title: 'Technology',
-        image: '/images/code.png',
-        category: 'Technology'
-    },
-    {
-        id: 2,
-        title: 'Environment',
-        image: '/images/flore.png',
-        category: 'Environment'
-    },
-    {
-        id: 3,
-        title: 'Business',
-        image: '/images/code.png',
-        category: 'Business'
-    }
+
+    { rubrique_uuid: 'b3752de8-c68b-4449-b5f5-a86c24fc5957', 
+        description: 'Tout ce qui touche à la vie sur le campus, les événements, les associations et plus.', 
+        titre: 'Vie sur le campus', 
+        image: '/vie.jpg'}
+,
+    { rubrique_uuid: '2cc88f73-773e-4314-959c-df7099b7b8bd', 
+        description: 'Les actualités sportives, les événements, les résultats et les compétitions.', 
+        titre: 'Sport', 
+        image: '/sport.jpg'}
+,
+    {rubrique_uuid: 'c5740c85-535c-40f3-97eb-ad59cb7c5f0e', 
+        description: 'Rubrique dédiée aux jeux vidéo, jeux de société et autres loisirs divers.', 
+        titre: 'Jeux et divers', 
+        image: '/divers.jpg'}
+
 ];
+
 
 const TopicsCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -74,24 +73,24 @@ const TopicsCarousel = () => {
 
                 {/* Carousel */}
                 <div className="relative w-full lg:max-w-4xl overflow-hidden">
-                    <div className="flex gap-4 items-center justify-center mt-2">
+                    <div className="flex gap-4  items-center justify-center mt-2">
                         {topics.map((topic, index) => (
                             <div
-                                key={topic.id}
-                                className={`relative w-full sm:max-w-xs md:max-w-sm lg:w-40 lg:h-76 rounded-full overflow-hidden transition-all duration-500 ${
+                                key={topic.rubrique_uuid}
+                                className={`relative sm:max-w-xs md:max-w-sm lg:w-40 lg:h-76 rounded-full overflow-hidden transition-all duration-500 ${
                                     index === currentIndex ? 'scale-105' : 'hidden lg:block scale-95 opacity-80'
                                 }`}
                             >
                                 <Image
                                     src={topic.image}
-                                    alt={topic.title}
+                                    alt={topic.titre}
                                     className="w-full h-full object-cover"
                                     width={800}
                                     height={600}
                                 />
                                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
                                     <h3 className="text-white text-center text-xl font-semibold">
-                                        {topic.category}
+                                        {topic.titre}
                                     </h3>
                                 </div>
                             </div>

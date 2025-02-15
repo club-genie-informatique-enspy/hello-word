@@ -6,7 +6,7 @@ const ContactPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto p-6">
         {/* En-tête avec effet de soulignement */}
-        <div className="text-center mb-12">
+        <div className="text-center mt-16 mb-12">
           <h1 className="text-4xl font-bold text-orange-500 mb-3 relative inline-block">
             Contactez-Nous
             <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>

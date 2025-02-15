@@ -80,7 +80,7 @@ export interface Rubrique{
   rubrique_uuid:string,
   description:string,
   titre:string,
-  image:string,
+  image?:string,
   created_at:Date,
   updated_at:Date,
 }
