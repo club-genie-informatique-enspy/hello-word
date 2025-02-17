@@ -14,12 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-         // Middleware global
          $middleware->append(EnsureFrontendRequestsAreStateful::class);
 
-         // Enregistrer le middleware de rôle
          $middleware->alias([
              'role' => RoleMiddleware::class,
+             'api-key'=> App\Http\Middleware\VerifyApiKey::class
         ]);
         $middleware->validateCsrfTokens(except: [
             '*'
