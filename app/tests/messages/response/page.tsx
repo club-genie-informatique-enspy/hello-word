@@ -1,10 +1,10 @@
-// @/app/(main)/messages/page.tsx
+// @/app/(main)/response/page.tsx
 'use client'
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getMessages } from '@/app/lib/article';
-import  toggleLike  from '@/hooks/messages';
+import toggleLike from '@/hooks/messages';
 import { MessageCard } from '@/components/v2/messages/card/message-card';
 import { Pagination } from '@/components/v2/messages/pagination/pagination';
 import { AnimationStyles } from '@/components/v2/messages/animations/styles';
@@ -14,18 +14,13 @@ import {
 } from '@/components/v2/messages/animations/floating-elements';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-interface MessageData {
-  message_uuid: string;
-  sender: string;
-  receiver: string;
-  contenu: string;
-  likes: number;
-}
+
 
 const MESSAGES_PER_PAGE = 6;
 
-export default function MessagesPage() {
+export default function ResponsePage() {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,7 +33,8 @@ export default function MessagesPage() {
     const fetchMessages = async () => {
       try {
         setLoading(true);
-        const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a');
+        // Utilisez un ID différent pour les messages de la version 2
+        const data = await getMessages('f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a',true);
         const token_ = localStorage.getItem('token')?.toString() || "";
         setMessages(data);
         setToken(token_);
@@ -134,20 +130,22 @@ export default function MessagesPage() {
       {[...Array(10)].map((_, i) => (
         <FloatingHeart key={`heart-${i}`} delay={i * 3} />
       ))}
-      {/* <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-  <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500 
-    text-transparent bg-clip-text">
-    Crush Anonymes 1
-  </h1>
-  <button
-    onClick={() => router.push('/v2/messages/response')}
-    className="group flex items-center gap-2 text-gray-600 hover:text-pink-500 
-      hover:bg-pink-50 transition-colors"
-  >
-    Version 2
-    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-  </button>
-</div> */}
+           <div className="w-full max-w-7xl mx-auto mb-8">
+  <div className="flex items-center justify-between">
+    <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500 
+      text-transparent bg-clip-text">
+      Messages
+    </h1>
+    <button
+      onClick={() => router.push('/tests/messages')}
+      className="inline-flex items-center text-gray-600 hover:text-pink-500 font-medium transition-colors"
+    >
+      <ArrowLeft className="w-4 h-4 mr-1" />
+      Version 1
+    </button>
+  </div>
+</div>
+      
       <div className="relative max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {displayedMessages.map((message, index) => (
@@ -160,6 +158,7 @@ export default function MessagesPage() {
                 onHeartClick={() => handleHeartClick(message.message_uuid)}
                 isLiked={likes[message.message_uuid]}
                 isRight={index % 2 === 1}
+                version="v2"
               />
             </div>
           ))}

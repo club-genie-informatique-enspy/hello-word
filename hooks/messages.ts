@@ -6,9 +6,6 @@ interface ToggleLikeParams {
   }
 
 const toogleLike = async ({ token, uuid_message }: ToggleLikeParams) => {
-
-
-
     try {
         const response = await axios.post(
           `/message/${uuid_message}/toogle-like`,

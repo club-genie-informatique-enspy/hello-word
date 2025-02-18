@@ -1,6 +1,6 @@
 import { Article, Rubrique } from "@/type";
 
-const API_BASE_URL = "https://api-hw.gi-enspy.com/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 import { fetchAPI } from "./api";         
@@ -67,6 +67,7 @@ export async function deleteArticle(uuid: string): Promise<void> {
     method: 'DELETE',
   });
 }
-export async function getMessages(uuid: string): Promise<Message[]> {
-  return fetchAPI(`/messages/${uuid}`);
+export async function getMessages(uuid: string, limitFirst94?: boolean): Promise<Message[]> {
+  const response = await fetchAPI(`/messages/${uuid}`);
+  return limitFirst94 ? response.slice(91) : response.slice(0,91);
 }

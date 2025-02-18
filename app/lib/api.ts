@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-const API_BASE_URL = "https://api-hw.gi-enspy.com/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {

@@ -9,13 +9,12 @@ interface Message {
 }
 
 interface MessageData {
+  message_uuid: string;
   sender: string;
   receiver: string;
   contenu: string;
   likes: number;
-  message_uuid: string;
 }
-
 interface AnimationPosition {
   top: number;
   left: number;

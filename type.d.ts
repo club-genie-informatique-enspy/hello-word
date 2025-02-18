@@ -72,4 +72,13 @@ export interface crushMessage{
   likes: number;
 
 }
+interface Rubrique {
+  id: number;
+  rubrique_uuid: string;
+  description: string;
+  titre: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+}
 

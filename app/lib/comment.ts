@@ -1,6 +1,6 @@
 import { Commentaire } from "@/type";
 
-const API_BASE_URL = "https://api-hw.gi-enspy.com/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 import { fetchAPI } from "./api";

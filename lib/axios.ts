@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: "https://api-hw.gi-enspy.com/api",
-  // baseURL: "http://localhost:8000/api",
+  //nous allons prendre l'url dans le variable d'environnement
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
     'X-API-KEY':"HfJcYj7AGYPHqS9x5eRub5XRK9zJFpEthdBl5ShvyJyBEStJnsGTFmEFyInY76G7",
     'Content-Type': 'application/json',
