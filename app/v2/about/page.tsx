@@ -1,5 +1,7 @@
+'use client';
 import React from "react";
 import { Mail, MapPin, Clock, Send } from "lucide-react";
+import { useAuth } from "@/hooks/auth";
 
 const ContactPage = () => {
   return (

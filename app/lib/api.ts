@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = "https://api-hw.gi-enspy.com/api"
 
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
@@ -10,6 +10,7 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
+      'X-API-KEY': 'HfJcYj7AGYPHqS9x5eRub5XRK9zJFpEthdBl5ShvyJyBEStJnsGTFmEFyInY76G7',
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': `Bearer ${token}`, } : {}),
       
@@ -17,7 +18,6 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   });
 
   const fullURL = `${API_BASE_URL}${endpoint}`;
-  console.log("URL API:", fullURL);
   
 
   if (!response.ok) {

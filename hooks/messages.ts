@@ -19,7 +19,6 @@ const toogleLike = async ({ token, uuid_message }: ToggleLikeParams) => {
             },
           }
         );
-        console.log(response.data);
         return response.data;
       } catch (error: any) {
         console.error('Erreur lors du basculement du like :', error);

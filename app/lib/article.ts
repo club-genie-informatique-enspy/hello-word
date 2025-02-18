@@ -1,6 +1,6 @@
 import { Article, Rubrique } from "@/type";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = "https://api-hw.gi-enspy.com/api"
 
 
 import { fetchAPI } from "./api";         
@@ -63,7 +63,6 @@ export async function updateArticle(uuid: string, articleData: Partial<Article>)
 
 
 export async function deleteArticle(uuid: string): Promise<void> {
-  // Route mise à jour pour supprimer un article
   return fetchAPI(`/article/${uuid}`, {
     method: 'DELETE',
   });

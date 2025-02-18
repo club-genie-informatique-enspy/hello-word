@@ -1,30 +1,38 @@
-import { useSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { redirect } from "next/navigation";
 import { Menu, X } from 'lucide-react';
+import { useAuth } from '@/hooks/auth';
 
 export const Navbar = () => {
-    const { data: session } = useSession();
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+    const {user, logout, isLoading} = useAuth();
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
         if (isProfileOpen) setIsProfileOpen(false);
     };
+    useEffect(() => {
+        if (!isLoading) {
+          setIsProfileOpen(false);
+          setIsMobileMenuOpen(false);
+        }
+      }, [user, isLoading]);
 
     const toggleProfileMenu = () => {
         setIsProfileOpen(!isProfileOpen);
     };
+    const Logout = () => {
+        logout();
+    }
 
     return (
         <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                <Link href="/v2" className="flex-shrink-0">
+                <Link href="/" className="flex-shrink-0">
                         <div className="relative w-32 h-12 md:w-40 md:h-16">
                         <Image
                             alt="Logo"
@@ -38,7 +46,7 @@ export const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/v2" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                        <Link href="/" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             Accueil
                         </Link>
                         <Link href="/v2/articles" className="text-gray-700 hover:text-[#FF9100] transition-colors">
@@ -53,14 +61,15 @@ export const Navbar = () => {
                         
 
                         {/* Profile/Sign in Button - Desktop */}
-                        {session ? (
+                        {user ? (
                             <div className="relative">
                                 <button
                                     onClick={toggleProfileMenu}
                                     className="flex items-center gap-2 focus:outline-none"
+                                    title="Profile Menu"
                                 >
                                     <Image
-                                        src={session.user?.image || '/placeholder-avatar.png'}
+                                        src={ '/images/2149556781.jpg'}
                                         alt="Profile"
                                         className="w-8 h-8 rounded-full"
                                         width={32}
@@ -77,7 +86,7 @@ export const Navbar = () => {
                                             Profile
                                         </Link>
                                         <button
-                                            onClick={() => signOut()}
+                                            onClick={() => Logout()}
                                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                                         >
                                             Sign out
@@ -142,17 +151,17 @@ export const Navbar = () => {
                             </Link>
 
                             {/* Profile/Sign in Button - Mobile */}
-                            {session ? (
+                            {user ? (
                                 <div className="border-t pt-4">
                                     <div className="flex items-center gap-3 px-2 py-2">
                                         <Image
-                                            src={session.user?.image || '/placeholder-avatar.png'}
+                                            src={ '/images/2149556781.jpg'}
                                             alt="Profile"
                                             className="w-8 h-8 rounded-full"
                                             width={32}
                                             height={32}
                                         />
-                                        <span className="text-gray-700">{session.user?.name}</span>
+                                        <span className="text-gray-700">{user?.name}</span>
                                     </div>
                                     <Link
                                         href="/profile"
@@ -163,7 +172,7 @@ export const Navbar = () => {
                                     </Link>
                                     <button
                                         onClick={() => {
-                                            signOut();
+                                            Logout();
                                             setIsMobileMenuOpen(false);
                                         }}
                                         className="block w-full text-left px-2 py-2 text-gray-700 hover:text-[#FF9100] transition-colors"

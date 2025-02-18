@@ -24,7 +24,6 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
     fetchArticles();
   }, []);
 
-  console.log(articles)
 
 
   const filteredArticles = selectedRubriqueId

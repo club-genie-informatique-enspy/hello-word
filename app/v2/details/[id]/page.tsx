@@ -14,7 +14,6 @@ export default function BlogPage() {
   const [post, setPost] = useState<Article | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  // console.log("PARAMS",params.id);
   const article_uuid = params.id;
 
   const formatDate = (dateString: string): string => {
@@ -61,7 +60,6 @@ export default function BlogPage() {
     return <p className="text-center mt-10 text-red-500">{error}</p>;
   }
 
-      console.log(post)
 
   if (!post) {
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;

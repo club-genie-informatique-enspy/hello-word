@@ -8,8 +8,6 @@ const Newsletter: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Handle newsletter subscription
-      console.log('Subscribe email:', email);
     } catch (error) {
       console.error('Subscription error:', error);
     }
