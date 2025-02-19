@@ -137,14 +137,14 @@ export default function MessagesPage() {
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
   <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500 
     text-transparent bg-clip-text">
-    Crush Anonymes 1
+    Crush Anonymes
   </h1>
   <button
     onClick={() => router.push('/tests/messages/response')}
     className="group flex items-center gap-2 text-gray-600 hover:text-pink-500 
       hover:bg-pink-50 transition-colors"
   >
-    Version 2
+    Part 2
     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
   </button>
 </div>

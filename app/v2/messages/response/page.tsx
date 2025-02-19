@@ -134,14 +134,14 @@ export default function ResponsePage() {
   <div className="flex items-center justify-between">
     <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500 
       text-transparent bg-clip-text">
-      Messages
+      Crush Anonymes
     </h1>
     <button
       onClick={() => router.push('/v2/messages')}
       className="inline-flex items-center text-gray-600 hover:text-pink-500 font-medium transition-colors"
     >
       <ArrowLeft className="w-4 h-4 mr-1" />
-      Version 1
+      Part 1
     </button>
   </div>
 </div>
