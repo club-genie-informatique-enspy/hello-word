@@ -20,9 +20,9 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-            'http://localhost:3000',
-            'https://hellow-word.vercel.app',
-            'https://hello-world.vercel.app'
+            'http://localhost:3000/*',
+            'https://hellow-word.vercel.app/*',
+            'https://hello-world.vercel.app/*',
         ],
     'allowed_origins_patterns' => [],
 
