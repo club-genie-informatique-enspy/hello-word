@@ -15,7 +15,7 @@ class MessagesTableSeeder extends Seeder
     public function run(): void
     {
         // Chemin vers votre fichier Excel dans le projet
-        $filePath = storage_path('app/data/crush_anonyme.xlsx');
+        $filePath = storage_path('app/data/crush_anonyme2.xlsx');
 
         // UUID de l'activité à utiliser (à remplacer par votre UUID)
         $activityUuid = 'f68b84ac-733b-4e9a-9cc9-b8c4e0a88b9a';

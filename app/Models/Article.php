@@ -16,8 +16,9 @@ class Article extends Model
     protected $fillable = [
         'article_uuid',
         'user_id',
-        'rubrique_uuid', 
+        'rubrique_uuid',
         'auteur',
+        // 'status',
         'titre',
         'contenu',
         'slug',
