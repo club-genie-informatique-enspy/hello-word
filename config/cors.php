@@ -23,6 +23,7 @@ return [
             'http://localhost:3000/*',
             'https://hellow-word.vercel.app/*',
             'https://hello-world.vercel.app/*',
+            '*'
         ],
     'allowed_origins_patterns' => [],
 
