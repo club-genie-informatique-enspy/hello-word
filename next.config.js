@@ -1,7 +1,8 @@
-// next.config.js
 const { resolve } = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -17,6 +18,14 @@ module.exports = {
     domains: ['picsum.photos'],
   },
   webpack: (config, { isServer }) => {
+    // Ajouter le plugin MiniCssExtractPlugin
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash].css',
+        chunkFilename: 'static/css/[name].[contenthash].css',
+      })
+    );
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -32,3 +41,5 @@ module.exports = {
     ignoreBuildErrors: true, 
   }
 };
+
+module.exports = nextConfig;

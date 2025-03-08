@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, MessageCircle } from 'lucide-react';
 import { redirect } from "next/navigation";
+import Link from 'next/link';
 
 
 interface BestArticlesProps {
@@ -151,9 +152,11 @@ const BestArticles: React.FC<BestArticlesProps> = ({
                                                 {0}
                                             </span>
                                         </div>
-                                        <button className="text-orange-500 hover:text-blue-700 font-medium focus:outline-none focus:underline">
-                                            Read More
-                                        </button>
+                                        <Link href={`/v2/details/${article.article_uuid}`}>
+                                            <button className="text-orange-500 hover:text-blue-700 font-medium focus:outline-none focus:underline">
+                                                Read More
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </article>

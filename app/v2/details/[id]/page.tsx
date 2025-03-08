@@ -169,12 +169,10 @@ export default function BlogPage() {
           </div>
 
           {/* Article content */}
-          <div className="prose max-w-none">
-            <p>
-              {post.contenu}
-            </p>
-            {/* Add more paragraphs */}
-          </div>
+          <div 
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.contenu }}
+          />
         </div>
       </article>
     </div>
