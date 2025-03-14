@@ -29,7 +29,8 @@ const topics: Topic[] = [
 ];
 
 
-const TopicsCarousel = () => {
+const 
+TopicsCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
