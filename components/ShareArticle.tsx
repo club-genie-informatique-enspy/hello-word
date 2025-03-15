@@ -89,5 +89,6 @@ export default function ShareArticle({ article  }) {
         </div>
       )}
     </div>
-  );
+  )
+  ;
 }
