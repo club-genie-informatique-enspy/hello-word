@@ -104,7 +104,7 @@ export default function HomePage() {
                     Abonnez-vous à notre newsletter pour recevoir les dernières actualités
                     et ne rien manquer des événements importants.
                 </p>
-                <form className="max-w-md mx-auto flex gap-4">
+                <form className="max-w-md mx-auto flex-col md:flex-row flex gap-4">
                     <input
                         type="email"
                         placeholder="Votre adresse email"
