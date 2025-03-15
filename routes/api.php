@@ -10,6 +10,21 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\ArticleControllerv2;
+use App\Http\Controllers\ClicherController;
+
+// Afficher un cliché
+Route::get('/clicher/{id}', [ClicherController::class, 'show'])->name('clicher.show');
+
+// Ajouter un commentaire
+Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->name('clicher.addComment');
+
+// Ajouter un like
+Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
+// Afficher le formulaire
+Route::get('/clicher/create', [ClicherController::class, 'create'])->name('clicher.create');
+
+// Enregistrer un nouveau cliché
+Route::post('/clicher/store', [ClicherController::class, 'store'])->name('clicher.store');
 
 Route::middleware('api-key')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
