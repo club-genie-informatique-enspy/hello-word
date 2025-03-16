@@ -1,23 +1,40 @@
 import { Button } from "@/components/ui/button"
-import { House } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function NotFound() {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4 py-12">
+            <div className="max-w-lg w-full bg-white rounded-xl overflow-hidden">
+                <div className="relative h-auto w-full py-4 flex justify-center">
+                    <div className="relative w-full h-64 md:h-80">
+                        <Image
+                            src="/images/not-found.png"
+                            alt="Page non trouvée"
+                            fill
+                            className="object-contain"
+                            priority
+                        />
+                    </div>
+                </div>
 
-  return (
-    <section className="my-16">
-      <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-        <div className="mx-auto max-w-screen-sm text-center">
-          <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl "> 404 </h1>
-          <p className="mb-4 text-3xl tracking-tight font-bold  md:text-4xl "> Quelque que chose ne va pas</p>
-          <p className="mb-4 text-lg font-light ">
-            Desole nous n'avons pas trouve cet article. Vous trouverz beaucoup a explorer dans la page d'accueil.
-          </p>
-          <Link href={"/"}>
-            <Button variant="link"> <House /> Revenir a la page d'acceuil </Button>
-          </Link>
+                <div className="p-8 text-center">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Page non trouvée</h2>
+
+                    <p className="text-gray-600 mb-8">
+                        Désolé, la page que vous recherchez semble avoir disparu.
+                        Vous trouverez beaucoup à explorer sur notre page d'accueil.
+                    </p>
+
+                    <Link href="/" className="inline-block">
+                        <Button className="bg-[#FF9100] hover:bg-[#e58200] text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2">
+                            <ArrowLeft size={18} />
+                            Retour à l'accueil
+                        </Button>
+                    </Link>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
-  )
+    )
 }

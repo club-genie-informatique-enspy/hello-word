@@ -50,13 +50,13 @@ export const useAuth = ({
   );
 
   // Initialisation du token
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken ? JSON.parse(storedToken) : null);
-      setIsLoading(false);
-    }
-  }, []);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            setToken(storedToken || null);
+            setIsLoading(false);
+        }
+    }, []);
 
   const handleRedirect = useCallback((path: string) => {
     if (isRedirecting) return;
@@ -105,7 +105,7 @@ export const useAuth = ({
         handleRedirect(loginUrl);
         return;
       }
-      
+
       // Si on a un token mais pas d'utilisateur (après chargement), déconnexion
       if (!user && !isValidating) {
         logout();
@@ -174,7 +174,7 @@ export const useAuth = ({
       }
       setToken(response.data.token);
       await mutate();
-      
+
       const intendedUrl = getAndClearIntendedUrl();
       handleRedirect(intendedUrl || defaultRedirect);
     } catch (error: any) {

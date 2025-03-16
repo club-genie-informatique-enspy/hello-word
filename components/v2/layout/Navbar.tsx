@@ -6,25 +6,21 @@ import { Menu, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth';
 
 export const Navbar = () => {
-    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const {user, logout, isLoading} = useAuth();
+
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
-        if (isProfileOpen) setIsProfileOpen(false);
     };
+
     useEffect(() => {
         if (!isLoading) {
-          setIsProfileOpen(false);
-          setIsMobileMenuOpen(false);
+            setIsMobileMenuOpen(false);
         }
-      }, [user, isLoading]);
+    }, [user, isLoading]);
 
-    const toggleProfileMenu = () => {
-        setIsProfileOpen(!isProfileOpen);
-    };
-    const Logout = () => {
-        logout();
+    const handleSignIn = () => {
+        redirect('/login');
     }
 
     return (
@@ -32,15 +28,15 @@ export const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                <Link href="/" className="flex-shrink-0">
+                    <Link href="/" className="flex-shrink-0">
                         <div className="relative w-32 h-12 md:w-40 md:h-16">
-                        <Image
-                            alt="Logo"
-                            src="/images/logo-light-2.png"
-                            fill
-                            priority
-                            className="object-contain transform scale-110"
-                        />
+                            <Image
+                                alt="Logo"
+                                src="/images/logo-light-2.png"
+                                fill
+                                priority
+                                className="object-contain transform scale-110"
+                            />
                         </div>
                     </Link>
 
@@ -58,50 +54,14 @@ export const Navbar = () => {
                         <Link href="/v2/about" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             À propos
                         </Link>
-                        
 
-                        {/* Profile/Sign in Button - Desktop */}
-                        {user ? (
-                            <div className="relative">
-                                <button
-                                    onClick={toggleProfileMenu}
-                                    className="flex items-center gap-2 focus:outline-none"
-                                    title="Profile Menu"
-                                >
-                                    <Image
-                                        src={ '/images/2149556781.jpg'}
-                                        alt="Profile"
-                                        className="w-8 h-8 rounded-full"
-                                        width={32}
-                                        height={32}
-                                    />
-                                </button>
-
-                                {isProfileOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100">
-                                        <Link
-                                            href="/v2/profile"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                        >
-                                            Profile
-                                        </Link>
-                                        <button
-                                            onClick={() => Logout()}
-                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                        >
-                                            Sign out
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <button
-                                onClick={() => redirect('/register')}
-                                className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
-                            >
-                                Sign in
-                            </button>
-                        )}
+                        {/* Toujours afficher le bouton Sign in, même si l'utilisateur est connecté */}
+                        <button
+                            onClick={handleSignIn}
+                            className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
+                        >
+                            Sign in
+                        </button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -150,46 +110,13 @@ export const Navbar = () => {
                                 Contact
                             </Link>
 
-                            {/* Profile/Sign in Button - Mobile */}
-                            {user ? (
-                                <div className="border-t pt-4">
-                                    <div className="flex items-center gap-3 px-2 py-2">
-                                        <Image
-                                            src={ '/images/2149556781.jpg'}
-                                            alt="Profile"
-                                            className="w-8 h-8 rounded-full"
-                                            width={32}
-                                            height={32}
-                                        />
-                                        <span className="text-gray-700">{user?.name}</span>
-                                    </div>
-                                    <Link
-                                        href="/profile"
-                                        className="block px-2 py-2 text-gray-700 hover:text-[#FF9100] transition-colors"
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                        Profile
-                                    </Link>
-                                    <button
-                                        onClick={() => {
-                                            Logout();
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                        className="block w-full text-left px-2 py-2 text-gray-700 hover:text-[#FF9100] transition-colors"
-                                    >
-                                        Sign out
-                                    </button>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={() => {
-                                        redirect('/register');
-                                    }}
-                                    className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
-                                >
-                                    Sign in
-                                </button>
-                            )}
+                            {/* Toujours afficher le bouton Sign in dans le menu mobile */}
+                            <button
+                                onClick={handleSignIn}
+                                className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
+                            >
+                                Sign in
+                            </button>
                         </div>
                     </div>
                 )}

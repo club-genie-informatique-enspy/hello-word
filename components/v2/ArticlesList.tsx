@@ -2,6 +2,7 @@
 import ArticleCard from "@/components/v2/ArticleCard";
 import { useState, useEffect } from "react";
 import { getAllArticles } from "@/app/lib/article";
+import { Article } from "@/type";
 
 const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | null }) => {
 
@@ -12,7 +13,7 @@ const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | nul
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const fetchedArticles = await getAllArticles(); 
+        const fetchedArticles = await getAllArticles();
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Erreur lors du chargement des articles:", error);
