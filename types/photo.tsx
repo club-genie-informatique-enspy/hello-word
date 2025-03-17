@@ -3,7 +3,7 @@ export interface Photo {
     image_path: string;
     description: string;
     author_signature: string;
-    likesCount: number;
+    likes_count: number;
     name?: string; // Non affiché
     aclass?: string; // Non affiché
   }

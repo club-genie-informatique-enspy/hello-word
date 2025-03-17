@@ -1,22 +1,18 @@
 'use client';
 
-import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { usePathname } from "next/navigation";
-
-import "./globals.css";
+import "./(main)/globals.css";
 import SessionProviderWrapper from "@/components/v2/SessionProviderWrapper";
-import { Navbar } from "@/components/v2/layout/Navbar";
-import Footer from "@/components/v2/layout/Footer";
 import Head from "next/head.js";
+import React from "react";
 
 const geistSans = localFont({
-    src: "./fonts/GeistVF.woff",
+    src: "./(main)/fonts/GeistVF.woff",
     variable: "--font-geist-sans",
     weight: "100 900",
 });
 const geistMono = localFont({
-    src: "./fonts/GeistMonoVF.woff",
+    src: "./(main)/fonts/GeistMonoVF.woff",
     variable: "--font-geist-mono",
     weight: "100 900",
 });
@@ -26,9 +22,6 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const pathname = usePathname();
-    const isAuthRoute = pathname?.startsWith('/auth') || false;
-
     return (
         <html lang="en">
         <Head>
@@ -44,14 +37,10 @@ export default function RootLayout({
             <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
             <link rel="manifest" href="/site.webmanifest" />
         </Head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen ${isAuthRoute ? 'bg-gray-50' : ''}`}>
-            <SessionProviderWrapper>
-                {!isAuthRoute && <Navbar />}
-                <main className="flex-grow">
-                    {children}
-                </main>
-                {!isAuthRoute && <Footer />}
-            </SessionProviderWrapper>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        <SessionProviderWrapper>
+            {children}
+        </SessionProviderWrapper>
         </body>
         </html>
     );

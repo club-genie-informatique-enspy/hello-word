@@ -1,15 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/hooks/auth"
 import Link from "next/link"
-import { validateEmail } from "../../lib/utils"
+import { validateEmail } from "../../(main)/lib/utils"
 import { UserData } from "@/type"
 import Image from "next/image"
 import { Mail, Lock, User, AlertCircle, CheckCircle, Eye, EyeOff } from "lucide-react"
@@ -87,7 +86,6 @@ export default function RegisterPage() {
                 ...userData,
                 setErrors: (errors) => {
                     setErrors(errors)
-                    // Afficher les erreurs avec toast
                     if (errors.name) {
                         toast.error(errors.name[0])
                     }
@@ -108,6 +106,8 @@ export default function RegisterPage() {
                 description: "Votre compte a été créé avec succès",
                 icon: <CheckCircle className="h-5 w-5 text-green-500" />,
             })
+            // Redirection vers la page de connexion
+            router.push("/login")
 
         } catch (error) {
             toast.error("Erreur d'inscription", {

@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect} from 'react';
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth';
 
 export const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const {user, logout, isLoading} = useAuth();
+    const pathname = usePathname();
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -22,6 +23,25 @@ export const Navbar = () => {
     const handleSignIn = () => {
         redirect('/login');
     }
+
+    // Fonction pour déterminer si un lien est actif
+    const isLinkActive = (path: string) => {
+        if (path === '/') {
+            return pathname === '/';
+        }
+
+        // Cas spécial pour les articles
+        if (path === '/v2/articles') {
+            return pathname === '/v2/articles' || pathname.startsWith('/v2/details');
+        }
+
+        // Pour les autres liens
+        return pathname.startsWith(path);
+    };
+
+    // Classe CSS pour les liens actifs
+    const activeLinkClass = "text-[#FF9100] font-medium";
+    const normalLinkClass = "text-gray-700 hover:text-[#FF9100] transition-colors";
 
     return (
         <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
@@ -42,19 +62,16 @@ export const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                        <Link href="/" className={isLinkActive('/') ? activeLinkClass : normalLinkClass}>
                             Accueil
                         </Link>
-                        <Link href="/v2/articles" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                        <Link href="/v2/articles" className={isLinkActive('/v2/articles') ? activeLinkClass : normalLinkClass}>
                             Articles
                         </Link>
-                        <Link href="/v2/cliches" className="text-gray-700 hover:text-[#FF9100] transition-colors">
-                            cliches
+                        <Link href="/v2/cliches" className={isLinkActive('/v2/cliches') ? activeLinkClass : normalLinkClass}>
+                            Cliches
                         </Link>
-                        <Link href="/v2/messages" className="text-gray-700 hover:text-[#FF9100] transition-colors">
-                            Crush Anonymes
-                        </Link>
-                        <Link href="/v2/about" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                        <Link href="/v2/about" className={isLinkActive('/v2/about') ? activeLinkClass : normalLinkClass}>
                             À propos
                         </Link>
 
@@ -85,36 +102,36 @@ export const Navbar = () => {
                     <div className="md:hidden bg-white py-4 border-t">
                         <div className="flex flex-col space-y-4 px-4">
                             <Link
+                                href="/"
+                                className={`py-2 transition-colors ${isLinkActive('/') ? activeLinkClass : normalLinkClass}`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Accueil
+                            </Link>
+                            <Link
                                 href="/v2/articles"
-                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
+                                className={`py-2 transition-colors ${isLinkActive('/v2/articles') ? activeLinkClass : normalLinkClass}`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Articles
                             </Link>
                             <Link
                                 href="/v2/cliches"
-                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
+                                className={`py-2 transition-colors ${isLinkActive('/v2/cliches') ? activeLinkClass : normalLinkClass}`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Cliches
                             </Link>
                             <Link
-                                href="/v2/messages"
-                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                Crush Anonymes
-                            </Link>
-                            <Link
                                 href="/v2/about"
-                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
+                                className={`py-2 transition-colors ${isLinkActive('/v2/about') ? activeLinkClass : normalLinkClass}`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 À propos
                             </Link>
                             <Link
                                 href="/v2/contact"
-                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
+                                className={`py-2 transition-colors ${isLinkActive('/v2/contact') ? activeLinkClass : normalLinkClass}`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Contact
