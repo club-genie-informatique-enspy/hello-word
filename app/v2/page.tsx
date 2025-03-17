@@ -102,7 +102,7 @@ export default function HomePage() {
                 <h2 className="text-3xl font-bold text-white mb-4">Restez informé</h2>
                 <p className="text-white mb-8 max-w-2xl mx-auto">
                     Abonnez-vous à notre newsletter pour recevoir les dernières actualités
-                    et ne rien manquer des événements importants.
+                    et ne rien manquer des événements importants .
                 </p>
                 <form className="max-w-md mx-auto flex-col md:flex-row flex gap-4">
                     <input
