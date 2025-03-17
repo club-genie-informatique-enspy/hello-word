@@ -1,7 +1,7 @@
 'use client';
 import ArticleCard from "@/components/v2/ArticleCard";
 import { useState, useEffect } from "react";
-import { getAllArticles } from "@/app/lib/article";
+import { getAllArticles } from "@/app/(main)/lib/article";
 import { Article } from "@/type";
 
 const ArticlesList = ({ selectedRubriqueId }: { selectedRubriqueId: string | null }) => {

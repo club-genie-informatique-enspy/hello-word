@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, MoreVertical } from 'lucide-react';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { getArticle } from '@/app/lib/article';
+import { getArticle } from '@/app/(main)/lib/article';
 import ShareArticle from '@/components/ShareArticle';
 import { Toaster } from 'react-hot-toast'; // Pour les notifications
 import SidebarDetails from '@/components/SidebarDetails';
+import {Article} from '@/type';
 
 
 export default function BlogPage() {
@@ -20,9 +20,9 @@ export default function BlogPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const article_uuid = params.id;
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: Date): string => {
     const date = new Date(dateString);
-  
+
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'short',
       month: 'short',
@@ -33,10 +33,10 @@ export default function BlogPage() {
       hour12: true,
       timeZoneName: 'short',
     };
-  
+
     return new Intl.DateTimeFormat('fr-FR', options).format(date);
   };
-  
+
 
   useEffect(() => {
 
@@ -70,7 +70,7 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="max-w-6xl mt-8 md:mt-16 mx-auto px-4 sm:px-6">
+    <div className="max-w-6xl mt-10 md:mt-24 mx-auto px-4 sm:px-6">
       {/* Toast notifications */}
       <Toaster position="top-right" />
 
@@ -95,34 +95,34 @@ export default function BlogPage() {
                 <MoreVertical className="w-5 h-5 text-gray-600 cursor-pointer" />
               </div>
             </div>
-            
+
             <h1 className="text-2xl sm:text-3xl font-bold mb-4">
               {post.titre}
             </h1>
-            
+
             <div className="text-xs sm:text-sm text-gray-500 mb-6">
               <p>PUBLISHED {formatDate(post.created_at)} UPDATED {formatDate(post.updated_at)}</p>
             </div>
 
             {/* Main article image */}
             <div className="mb-6">
-              <img 
+              <img
                 src={post.image}
-                alt={post.titre} 
+                alt={post.titre}
                 className="w-full max-w-full rounded-lg"
               />
               <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                {post.slogan}
+                {post.slug}
               </p>
             </div>
 
             {/* Article content */}
-            <div 
+            <div
               className="prose prose-base sm:prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: post.contenu }}
             />
           </div>
-          
+
           {/* Ajout d'une section de partage en bas de l'article */}
           <div className="mt-8 border-t pt-6">
             <div className="flex flex-col items-center justify-center">

@@ -3,14 +3,14 @@
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getMessages } from '@/app/lib/article';
+import { getMessages } from '@/app/(main)/lib/article';
 import  toggleLike  from '@/hooks/messages';
 import { MessageCard } from '@/components/v2/messages/card/message-card';
 import { Pagination } from '@/components/v2/messages/pagination/pagination';
 import { AnimationStyles } from '@/components/v2/messages/animations/styles';
-import { 
-  FloatingBubble, 
-  FloatingHeart 
+import {
+  FloatingBubble,
+  FloatingHeart
 } from '@/components/v2/messages/animations/floating-elements';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
@@ -42,7 +42,7 @@ export default function MessagesPage() {
         const token_ = localStorage.getItem('token')?.toString() || "";
         setMessages(data);
         setToken(token_);
-        
+
         const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
         const initialLikes = data.reduce<{ [key: string]: boolean }>((acc, message) => ({
           ...acc,
@@ -67,9 +67,9 @@ export default function MessagesPage() {
 
     try {
       setLoading(true);
-      await toggleLike({ 
-        token: token.replace(/^"|"$/g, ""), 
-        uuid_message: messageUuid 
+      await toggleLike({
+        token: token.replace(/^"|"$/g, ""),
+        uuid_message: messageUuid
       });
 
       const likedMessages: string[] = JSON.parse(localStorage.getItem('likedMessages') || '[]');
@@ -88,8 +88,8 @@ export default function MessagesPage() {
         [messageUuid]: !prev[messageUuid]
       }));
 
-      setMessages(prev => prev.map(msg => 
-        msg.message_uuid === messageUuid 
+      setMessages(prev => prev.map(msg =>
+        msg.message_uuid === messageUuid
           ? { ...msg, likes: msg.likes + (likes[messageUuid] ? -1 : 1) }
           : msg
       ));
@@ -124,24 +124,24 @@ export default function MessagesPage() {
   const displayedMessages = messages.slice(startIndex, startIndex + MESSAGES_PER_PAGE);
 
   return (
-    <div className="relative p-8 mt-16 bg-gradient-to-b from-white to-pink-50 
+    <div className="relative p-8 mt-16 bg-gradient-to-b from-white to-pink-50
       border-2 border-gray-200 rounded-xl min-h-screen overflow-hidden">
       <AnimationStyles />
       {[...Array(15)].map((_, i) => (
         <FloatingBubble key={`bubble-${i}`} delay={i * 2} />
       ))}
-      
+
       {[...Array(10)].map((_, i) => (
         <FloatingHeart key={`heart-${i}`} delay={i * 3} />
       ))}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-  <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500 
+  <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-500
     text-transparent bg-clip-text">
     Crush Anonymes
   </h1>
   <button
     onClick={() => router.push('/v2/messages/response')}
-    className="group flex items-center gap-2 text-gray-600 hover:text-pink-500 
+    className="group flex items-center gap-2 text-gray-600 hover:text-pink-500
       hover:bg-pink-50 transition-colors"
   >
     Part 2
@@ -151,8 +151,8 @@ export default function MessagesPage() {
       <div className="relative max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {displayedMessages.map((message, index) => (
-            <div 
-              key={message.message_uuid} 
+            <div
+              key={message.message_uuid}
               className={index % 2 === 1 ? 'flex justify-end' : 'flex justify-start'}
             >
               <MessageCard

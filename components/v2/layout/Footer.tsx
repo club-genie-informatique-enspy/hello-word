@@ -47,11 +47,6 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/v2/messages" className="text-gray-300 hover:text-[#FF9100]">
-                                    Crush Anonyme
-                                </Link>
-                            </li>
-                            <li>
                                 <Link href="/about" className="text-gray-300 hover:text-[#FF9100]">
                                     À propos
                                 </Link>

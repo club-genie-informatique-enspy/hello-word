@@ -135,23 +135,18 @@ export default function MeilleurClichePage() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Meilleur Cliché | Notre Galerie</title>
-        <meta name="description" content="Découvrez les meilleurs clichés de notre communauté" />
-      </Head>
-
+    <div className="mt-32">
       <main className="min-h-screen bg-white pb-16">
         {loading ? (
           <div className="flex justify-center items-center h-screen">
-            <div 
-              className="rounded-full h-12 w-12" 
-              style={{ 
+            <div
+              className="rounded-full h-12 w-12"
+              style={{
                 background: 'linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
                 animation: 'spin 1s linear infinite',
                 maskImage: 'radial-gradient(transparent 40%, black 50%)',
                 WebkitMaskImage: 'radial-gradient(transparent 40%, black 50%)'
-              }} 
+              }}
             />
           </div>
         ) : (
@@ -166,6 +161,6 @@ export default function MeilleurClichePage() {
           to { transform: rotate(360deg); }
         }
       `}</style>
-    </>
+    </div>
   );
 }

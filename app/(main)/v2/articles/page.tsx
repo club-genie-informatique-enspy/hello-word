@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ArticlesList from "@/components/v2/ArticlesList";
-import { getAllRubriques } from "@/app/lib/article";
+import { getAllRubriques } from "@/app/(main)/lib/article";
 import Sidebar from "@/components/v2/Sidebar";
 import { Search } from "lucide-react";
 import { Rubrique } from "@/type";
@@ -11,11 +11,11 @@ export default function ForYouPage() {
   const [selectedRubriqueId, setSelectedRubriqueId] = useState<string | null>(null);
   const [_rubriques, setRubriques] = useState<Rubrique[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     async function fetchRubriques() {
       try {
-        const fetchedRubriques = await getAllRubriques(); 
+        const fetchedRubriques = await getAllRubriques();
         setRubriques(fetchedRubriques);
       } catch (error) {
         console.error("Erreur lors du chargement des Rubriques:", error);

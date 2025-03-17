@@ -291,7 +291,7 @@ const HomePage = () => {
                             </p>
                         </div>
                         <Link
-                            href="/articles"
+                            href="/v2/articles"
                             className="mt-4 md:mt-0 px-6 py-3 bg-[#FF9100] text-white rounded-md hover:bg-orange-700 transition-colors inline-flex items-center justify-center font-medium"
                         >
                             Tous les articles
@@ -325,7 +325,7 @@ const HomePage = () => {
                                         </div>
                                         <div className="p-6">
                                             <h3 className="font-semibold text-lg mb-3 text-gray-800 hover:text-orange-600 transition-colors">
-                                                <Link href={`/v2/articles/${article.article_uuid}`}>
+                                                <Link href={`/v2/details/${article.article_uuid}`}>
                                                     {article.titre}
                                                 </Link>
                                             </h3>
@@ -339,7 +339,7 @@ const HomePage = () => {
                                                         <MessageCircle className="w-4 h-4 group-hover:text-blue-500 transition-colors" />{0}
                                                     </span>
                                                 </div>
-                                                <Link href={`/v2/articles/${article.article_uuid}`}>
+                                                <Link href={`/v2/details/${article.article_uuid}`}>
                                                     <span className="text-[#FF9100] hover:text-[orange-500] font-medium cursor-pointer">
                                                       Lire plus
                                                     </span>

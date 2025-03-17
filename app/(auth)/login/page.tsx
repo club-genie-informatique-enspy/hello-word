@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/hooks/auth"
 import Link from "next/link"
-import { validateEmail } from "../../lib/utils"
+import { validateEmail } from "../../(main)/lib/utils"
 import Image from "next/image"
 import { Mail, Lock, AlertCircle, CheckCircle, Eye, EyeOff } from "lucide-react"
 import { Toaster, toast } from "sonner"
@@ -71,6 +70,9 @@ export default function LoginPage() {
                     }
                 },
             })
+
+            // Redirection vers la page d'accueil
+            router.push("/")
         } catch (error) {
             toast.error("Erreur de connexion", {
                 description: "Une erreur est survenue. Veuillez réessayer plus tard.",
