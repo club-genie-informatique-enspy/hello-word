@@ -48,6 +48,9 @@ export const Navbar = () => {
                         <Link href="/v2/articles" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             Articles
                         </Link>
+                        <Link href="/v2/cliches" className="text-gray-700 hover:text-[#FF9100] transition-colors">
+                            cliches
+                        </Link>
                         <Link href="/v2/messages" className="text-gray-700 hover:text-[#FF9100] transition-colors">
                             Crush Anonymes
                         </Link>
@@ -87,6 +90,13 @@ export const Navbar = () => {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Articles
+                            </Link>
+                            <Link
+                                href="/v2/cliches"
+                                className="text-gray-700 hover:text-[#FF9100] py-2 transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Cliches
                             </Link>
                             <Link
                                 href="/v2/messages"

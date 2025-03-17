@@ -1,21 +1,15 @@
-import React from "react";
-import { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-    title: 'Authentification',
-    description: 'Pages d\'authentification'
-}
+import React from "react";
 
 export default function AuthLayout({
-   children,
-}: {
+                                       children,
+                                   }: {
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
-        <body className="bg-gray-50">
-            {children}
-        </body>
-        </html>
+        <div className="bg-gray-50">
+                {children}
+        </div>
     )
 }

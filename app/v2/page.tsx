@@ -259,9 +259,9 @@ const HomePage = () => {
                                         className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                                     />
                                     <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(topic.rubrique_uuid)}`}>
-                      Populaire
-                    </span>
+                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(topic.rubrique_uuid)}`}>
+                                          Populaire
+                                        </span>
                                         <h3 className="text-xl font-bold text-white mt-2">{topic.titre}</h3>
                                     </div>
                                 </div>
@@ -304,48 +304,51 @@ const HomePage = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {articles.slice(0, 6).map((article, index) => (
-                                <article
-                                    key={article.article_uuid || index}
-                                    className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
-                                >
-                                    <div className="relative h-48 overflow-hidden">
-                                        <img
-                                            src={article.image}
-                                            alt={article.titre}
-                                            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                                        />
-                                        <div className="absolute top-4 left-4">
-                                              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(article.rubrique_uuid)}`}>
-                                                Tendance
-                                              </span>
-                                        </div>
-                                    </div>
-                                    <div className="p-6">
-                                        <h3 className="font-semibold text-lg mb-3 text-gray-800 hover:text-orange-600 transition-colors">
-                                            <Link href={`/v2/articles/${article.article_uuid}`}>
-                                                {article.titre}
-                                            </Link>
-                                        </h3>
-                                        <div className="flex justify-between items-center text-sm">
-                                            <div className="flex gap-4 text-gray-500">
-                                                <span className="flex items-center gap-1.5 group">
-                                                  <Heart className="w-4 h-4 group-hover:text-red-500 transition-colors" />
-                                                    {article.likes}
-                                                </span>
-                                                <span className="flex items-center gap-1.5 group">
-                                                    <MessageCircle className="w-4 h-4 group-hover:text-blue-500 transition-colors" />{0}
+                            {(() => {
+                                // Limiter à 5 articles maximum
+                                return articles.slice(0,5).map((article, index) => (
+                                    <article
+                                        key={article.article_uuid || index}
+                                        className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+                                    >
+                                        <div className="relative h-48 overflow-hidden">
+                                            <img
+                                                src={article.image}
+                                                alt={article.titre}
+                                                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                            />
+                                            <div className="absolute top-4 left-4">
+                                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(article.rubrique_uuid)}`}>
+                                                    Tendance
                                                 </span>
                                             </div>
-                                            <Link href={`/articles/${article.article_uuid}`}>
-                                                <span className="text-[#FF9100] hover:text-[orange-500] font-medium cursor-pointer">
-                                                  Lire plus
-                                                </span>
-                                            </Link>
                                         </div>
-                                    </div>
-                                </article>
-                            ))}
+                                        <div className="p-6">
+                                            <h3 className="font-semibold text-lg mb-3 text-gray-800 hover:text-orange-600 transition-colors">
+                                                <Link href={`/v2/articles/${article.article_uuid}`}>
+                                                    {article.titre}
+                                                </Link>
+                                            </h3>
+                                            <div className="flex justify-between items-center text-sm">
+                                                <div className="flex gap-4 text-gray-500">
+                                                    <span className="flex items-center gap-1.5 group">
+                                                      <Heart className="w-4 h-4 group-hover:text-red-500 transition-colors" />
+                                                        {article.likes}
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5 group">
+                                                        <MessageCircle className="w-4 h-4 group-hover:text-blue-500 transition-colors" />{0}
+                                                    </span>
+                                                </div>
+                                                <Link href={`/v2/articles/${article.article_uuid}`}>
+                                                    <span className="text-[#FF9100] hover:text-[orange-500] font-medium cursor-pointer">
+                                                      Lire plus
+                                                    </span>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </article>
+                                ));
+                            })()}
                         </div>
                     )}
                 </div>
