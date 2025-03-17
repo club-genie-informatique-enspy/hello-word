@@ -12,19 +12,7 @@ use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\ArticleControllerv2;
 use App\Http\Controllers\ClicherController;
 
-// Afficher un cliché
-Route::get('/clicher/{id}', [ClicherController::class, 'show'])->name('clicher.show');
 
-// Ajouter un commentaire
-Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->name('clicher.addComment');
-
-// Ajouter un like
-Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
-// Afficher le formulaire
-Route::get('/clicher/create', [ClicherController::class, 'create'])->name('clicher.create');
-
-// Enregistrer un nouveau cliché
-Route::post('/clicher/store', [ClicherController::class, 'store'])->name('clicher.store');
 
 Route::middleware('api-key')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
@@ -120,4 +108,14 @@ Route::get('/articles', [ArticleControllerv2::class, 'index']);
 Route::get('/articles/{article}', [ArticleControllerv2::class, 'show']);
 // Ajoutez cette route dans routes/api.php
 Route::get('test-storage', [ArticleControllerv2::class, 'testStorage']);
+// Afficher un cliché
+Route::get('/clicher/{id}', [ClicherController::class, 'show'])->name('clicher.show');
+
+// Ajouter un commentaire
+Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->name('clicher.addComment');
+
+// Ajouter un like
+Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
+
+Route::get('/clichers', [ClicherController::class, 'index']);
 });
