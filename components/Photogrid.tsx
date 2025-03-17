@@ -13,16 +13,16 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fonction pour déterminer la taille de chaque photo en fonction du nombre de likes
-  const getPhotoSize = (likesCount: number) => {
+  const getPhotoSize = (likes_count: number) => {
     // Par défaut, on utilise une taille aléatoire, mais celles avec beaucoup de likes sont plus grandes
-    if (likesCount > 50) return "col-span-2 row-span-2"; // Grande
-    if (likesCount > 30) return "col-span-2 row-span-1"; // Moyenne-Large
-    if (likesCount > 20) return "col-span-1 row-span-2"; // Moyenne-Haute
+    if (likes_count > 50) return "col-span-2 row-span-2"; // Grande
+    if (likes_count > 30) return "col-span-2 row-span-1"; // Moyenne-Large
+    if (likes_count > 20) return "col-span-1 row-span-2"; // Moyenne-Haute
     
     // Pour les photos avec moins de likes, assignation aléatoire
     const randomSize = Math.floor(Math.random() * 4);
-    if (randomSize === 0 && likesCount > 10) return "col-span-2 row-span-1";
-    if (randomSize === 1 && likesCount > 10) return "col-span-1 row-span-2";
+    if (randomSize === 0 && likes_count > 10) return "col-span-2 row-span-1";
+    if (randomSize === 1 && likes_count > 10) return "col-span-1 row-span-2";
     return "col-span-1 row-span-1"; // Petite (taille standard)
   };
 
@@ -54,12 +54,12 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
         {photos.map((photo) => (
           <div 
             key={photo.id}
-            className={`relative bg-gray-100 ${getPhotoSize(photo.likesCount)}`}
+            className={`relative bg-gray-100 ${getPhotoSize(photo.likes_count)}`}
             onClick={() => openPhotoDetail(photo)}
           >
             <div className="relative w-full h-full aspect-square overflow-hidden">
               <Image
-                src={photo.imageUrl}
+                src={photo.image_path}
                 alt={photo.description}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

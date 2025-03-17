@@ -20,7 +20,7 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose }) =
     // Implémentation du partage (pourrait utiliser l'API Web Share si disponible)
     if (navigator.share) {
       navigator.share({
-        title: `Photo par ${photo.signature}`,
+        title: `Photo par ${photo.author_signature}`,
         text: photo.description,
         url: window.location.href,
       }).catch((error) => console.log('Erreur lors du partage:', error));
@@ -39,16 +39,14 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose }) =
             <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden relative">
               <Image 
                 src="/avatar-placeholder.jpg" 
-                alt={photo.signature}
+                alt={photo.author_signature}
                 fill
                 className="object-cover"
               />
             </div>
             <div>
-              <p className="font-medium text-sm">{photo.signature}</p>
-              <p className="text-xs text-gray-500">
-                {new Date(photo.createdAt).toLocaleDateString()}
-              </p>
+              <p className="font-medium text-sm">{photo.author_signature}</p>
+              
             </div>
           </div>
           <button onClick={onClose} className="text-gray-500">
@@ -62,7 +60,7 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose }) =
         <div className="relative w-full h-auto flex-grow overflow-hidden">
           <div className="relative w-full aspect-square">
             <Image
-              src={photo.imageUrl}
+              src={photo.image_path}
               alt={photo.description}
               fill
               className="object-contain"
@@ -89,7 +87,7 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose }) =
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
               />
             </svg>
-            <span>{isLiked ? photo.likesCount + 1 : photo.likesCount} j'aime</span>
+            <span>{isLiked ? photo.likes_count + 1 : photo.likes_count} j'aime</span>
           </button>
           <button 
             onClick={handleShare}
@@ -109,7 +107,7 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose }) =
 
         {/* Description */}
         <div className="p-4 max-h-[30vh] overflow-y-auto">
-          <p className="font-medium text-sm mb-1">{photo.signature}</p>
+          <p className="font-medium text-sm mb-1">{photo.author_signature}</p>
           <p className="text-sm">{photo.description}</p>
         </div>
       </div>

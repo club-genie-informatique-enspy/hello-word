@@ -19,7 +19,7 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
   rainbowGradient
 }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [currentLikes, setCurrentLikes] = useState(photo.likesCount);
+  const [currentLikes, setCurrentLikes] = useState(photo.likes_count);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -30,7 +30,7 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
     // Implémentation du partage (pourrait utiliser l'API Web Share si disponible)
     if (navigator.share) {
       navigator.share({
-        title: `Photo par ${photo.signature}`,
+        title: `Photo par ${photo.author_signature}`,
         text: photo.description,
         url: window.location.href,
       }).catch((error) => console.log('Erreur lors du partage:', error));
@@ -57,7 +57,7 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
                 <div className="w-full h-full rounded-full overflow-hidden bg-white">
                   <Image 
                     src="/avatar-placeholder.jpg" 
-                    alt={photo.signature}
+                    alt={photo.author_signature}
                     width={32}
                     height={32}
                     className="object-cover"
@@ -65,10 +65,8 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
                 </div>
               </div>
               <div>
-                <p className="font-medium text-sm" style={{ color: themeColor }}>{photo.signature}</p>
-                <p className="text-xs text-gray-500">
-                  {new Date(photo.createdAt).toLocaleDateString()}
-                </p>
+                <p className="font-medium text-sm" style={{ color: themeColor }}>{photo.author_signature}</p>
+              
               </div>
             </div>
             <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -82,7 +80,7 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
           <div className="relative w-full flex-grow overflow-hidden">
             <div className="relative w-full aspect-square">
               <Image
-                src={photo.imageUrl}
+                src={photo.image_path}
                 alt={photo.description}
                 fill
                 className="object-contain"
@@ -130,7 +128,7 @@ const RainbowPhotoDetailModal: React.FC<RainbowPhotoDetailModalProps> = ({
 
           {/* Description */}
           <div className="p-4 max-h-[30vh] overflow-y-auto">
-            <p className="font-medium text-sm mb-1" style={{ color: themeColor }}>{photo.signature}</p>
+            <p className="font-medium text-sm mb-1" style={{ color: themeColor }}>{photo.author_signature}</p>
             <p className="text-sm">{photo.description}</p>
             
             {/* Tags arc-en-ciel */}

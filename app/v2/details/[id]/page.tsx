@@ -99,11 +99,11 @@ export default function BlogPage() {
             <h1 className="text-2xl sm:text-3xl font-bold mb-4">
               {post.titre}
             </h1>
-            
+           {/* 
             <div className="text-xs sm:text-sm text-gray-500 mb-6">
               <p>PUBLISHED {formatDate(post.created_at)} UPDATED {formatDate(post.updated_at)}</p>
             </div>
-
+*/}
             {/* Main article image */}
             <div className="mb-6">
               <img 

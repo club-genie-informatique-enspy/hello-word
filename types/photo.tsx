@@ -1,10 +1,9 @@
 export interface Photo {
     id: string;
-    imageUrl: string;
+    image_path: string;
     description: string;
-    signature: string;
+    author_signature: string;
     likesCount: number;
-    createdAt: string;
-    authorName?: string; // Non affiché
-    authorClass?: string; // Non affiché
+    name?: string; // Non affiché
+    aclass?: string; // Non affiché
   }

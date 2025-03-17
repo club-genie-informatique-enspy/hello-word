@@ -57,7 +57,7 @@ const RainbowPhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
     if (photos.length === 0 || columns === 0) return;
 
     // Trier d'abord par nombre de likes (pour mettre les plus populaires en priorité)
-    const sortedPhotos = [...photos].sort((a, b) => b.likesCount - a.likesCount);
+    const sortedPhotos = [...photos].sort((a, b) => b.likes_count - a.likes_count);
     
     // Initialiser le tableau pour chaque colonne
     const grid: Photo[][] = Array.from({ length: columns }, () => []);
@@ -80,16 +80,16 @@ const RainbowPhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
 
   // Fonction pour déterminer la hauteur relative d'une photo (pour l'algorithme de placement)
   const getRelativeHeight = (photo: Photo) => {
-    if (photo.likesCount > 50) return 2;
-    if (photo.likesCount > 30) return 1.5;
+    if (photo.likes_count > 50) return 2;
+    if (photo.likes_count > 30) return 1.5;
     return 1;
   };
 
   // Fonction pour déterminer la taille de chaque photo dans le DOM
   const getPhotoHeight = (photo: Photo) => {
-    if (photo.likesCount > 50) return "h-96"; // Grande
-    if (photo.likesCount > 30) return "h-72"; // Moyenne
-    if (photo.likesCount > 20) return "h-64"; // Assez grande
+    if (photo.likes_count > 50) return "h-96"; // Grande
+    if (photo.likes_count > 30) return "h-72"; // Moyenne
+    if (photo.likes_count > 20) return "h-64"; // Assez grande
     return "h-52"; // Standard
   };
 
@@ -135,7 +135,7 @@ const RainbowPhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
               >
                 <div className="relative w-full h-full bg-white rounded-md overflow-hidden">
                   <img
-                    src={photo.imageUrl}
+                    src={photo.image_path}
                     alt={photo.description}
                     className="w-full h-full object-cover hover:opacity-90 transition-opacity cursor-pointer rounded-md"
                   />
@@ -147,7 +147,7 @@ const RainbowPhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
                         style={{ color: getColorForIndex(columnIndex * 10 + photoIndex) }}>
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
-                    <span className="text-xs font-medium ml-1" style={{ color: getColorForIndex(columnIndex * 10 + photoIndex) }}>{photo.likesCount}</span>
+                    <span className="text-xs font-medium ml-1" style={{ color: getColorForIndex(columnIndex * 10 + photoIndex) }}>{photo.likes_count}</span>
                   </div>
                   
                   {/* Video icon pour certaines photos (aléatoire) */}
