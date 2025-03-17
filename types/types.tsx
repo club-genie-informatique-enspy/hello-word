@@ -2,12 +2,12 @@ interface Author {
     name: string;
     avatar?: string;
   }
-  
+
  interface ArticleStats {
     likes: number;
     comments: number;
   }
-  
+
 interface ArticleCardProps {
     title: string;
     excerpt: string;
@@ -24,15 +24,15 @@ interface ArticleCardProps {
     image: string;
     source: string;
     nb_vues: number;
-    likes: string; // Si `likes` est un nombre, remplacez `string` par `number`
+    likes: number;
     slug: string;
-    created_at: string; 
-    updated_at: string; 
+    created_at: string;
+    updated_at: string;
     slogan: string;
     auteur:string;
-    rubrique_uuid: string;
+    // rubrique_uuid: string;
   }
-  
+
   interface User {
     id: number;
     name: string;
@@ -45,7 +45,7 @@ interface ArticleCardProps {
     password: string;
     role: string;
   }
-  
+
   interface DataToLogin {
     email: string;
     password: string;

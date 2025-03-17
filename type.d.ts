@@ -23,6 +23,7 @@ export interface Posts {
     likes: number;
     created_at: Date;
     updated_at: Date;
+    rubrique_uuid: string;
   }
 
   export interface Commentaire {
@@ -62,7 +63,7 @@ export interface Activity{
 
 }
 export interface crushMessage{
-  
+
   message_uuid: string;
   activity_uuid: string;
   sender: string;
