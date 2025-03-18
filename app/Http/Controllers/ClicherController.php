@@ -29,7 +29,7 @@ class ClicherController extends Controller
             'class' => 'required|string|max:255',
         ]);
 
-        $imagePath = $request->file('image')->store('public/images');
+        $imagePath = $request->file('image')->store('public/images/imgclichers');
         $imagePath = str_replace('public/', '', $imagePath);
 
         $clicher = Clicher::create([

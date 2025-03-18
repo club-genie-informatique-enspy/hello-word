@@ -69,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/activity/{uuid}/toogle-like', [ActivityController::class, 'toggleLike']);
     Route::post('/message/{uuid}/toogle-like', [MessageController::class, 'toggleLike']);
     Route::post('/article/{uuid}/toogle-like', [ArticleController::class, 'toggleLike']);
+   
 });
 
 Route::middleware('auth:sanctum', 'role:admin')->group(function () {
@@ -116,6 +117,7 @@ Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->
 
 // Ajouter un like
 Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
-
+ 
 Route::get('/clichers', [ClicherController::class, 'index']);
+
 });
