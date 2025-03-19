@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArticlesList from "@/components/v2/ArticlesList";
 import { getAllRubriques } from "@/app/(main)/lib/article";
 import Sidebar from "@/components/v2/Sidebar";
 import { Search } from "lucide-react";
 import { Rubrique } from "@/type";
+import {toast, Toaster} from "sonner";
 
 export default function ForYouPage() {
   const [selectedRubriqueId, setSelectedRubriqueId] = useState<string | null>(null);
@@ -31,9 +32,12 @@ export default function ForYouPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold ">For you</h1>
-          <button className="flex md:hidden bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors ml-4">
-            Create Account
+          <h1 className="text-3xl font-bold ">Pour Vous</h1>
+          <button
+              className="flex md:hidden bg-[#FF9100] text-white px-6 py-2 rounded-full hover:bg-orange-400 transition-colors ml-4"
+              onClick={() => toast.info("Fonctionnalité en cours de développement")}
+          >
+            Soumettre un article
           </button>
         </div>
 
@@ -44,12 +48,15 @@ export default function ForYouPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search articles"
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Rechercher des articles"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9100]    "
               />
             </div>
-            <button className="hidden md:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-700 transition-colors ml-4">
-              Create Account
+            <button
+                className="hidden md:block bg-[#FF9100] text-white px-6 py-2 rounded-full hover:bg-orange-400 transition-colors ml-4"
+                onClick={() => toast.info("Fonctionnalité en cours de développement")}
+            >
+                Soumettre un article
             </button>
           </div>
 
@@ -57,17 +64,17 @@ export default function ForYouPage() {
           <div className="flex gap-4 overflow-x-auto pb-2">
             <button
               className={`px-4 py-2 rounded-full ${
-                selectedRubriqueId === null ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                selectedRubriqueId === null ? "bg-[#FF9100] text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
               onClick={() => setSelectedRubriqueId(null)}
             >
-              All
+              Tout
             </button>
             {_rubriques.map(rubrique => (
               <button
                 key={rubrique.rubrique_uuid}
                 className={`px-4 py-2 rounded-full ${
-                  selectedRubriqueId === rubrique.rubrique_uuid ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  selectedRubriqueId === rubrique.rubrique_uuid ? "bg-[#FF9100] text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
                 onClick={() => setSelectedRubriqueId(rubrique.rubrique_uuid)}
               >
@@ -90,6 +97,14 @@ export default function ForYouPage() {
           </div>
         </div>
       </main>
+        <Toaster
+            position="top-right"
+            richColors
+            expand={false}
+            closeButton={true}
+            visibleToasts={3}
+            theme="light"
+        />
     </div>
   );
 }

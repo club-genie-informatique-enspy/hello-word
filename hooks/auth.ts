@@ -33,7 +33,7 @@ interface User {
     name: string;
     email: string;
     role: string;
-    // ajoutez d'autres propriétés selon votre modèle utilisateur
+    email_verified_at?: string | null;
 }
 
 export const useAuth = ({
@@ -48,19 +48,13 @@ export const useAuth = ({
     const [isRedirecting, setIsRedirecting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Initialisation du token depuis localStorage
+    // Initialisation du token depuis localStorage - SIMPLIFIÉ
     useEffect(() => {
         if (typeof window !== "undefined") {
             const storedToken = localStorage.getItem("token");
             if (storedToken) {
-                try {
-                    // Vérifier si le token est un JSON valide
-                    const parsedToken = JSON.parse(storedToken);
-                    setToken(parsedToken);
-                } catch (e) {
-                    // Si ce n'est pas un JSON valide, utiliser la valeur telle quelle
-                    setToken(storedToken);
-                }
+                // Pas de tentative de parsing JSON
+                setToken(storedToken);
             }
             setIsLoading(false);
         }
@@ -70,8 +64,10 @@ export const useAuth = ({
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            console.log('Token configuré dans les headers:', token);
         } else {
             delete axios.defaults.headers.common['Authorization'];
+            console.log('Headers d\'autorisation supprimés');
         }
     }, [token]);
 
@@ -101,7 +97,6 @@ export const useAuth = ({
             errorRetryCount: 2
         }
     );
-
     const handleRedirect = useCallback((path: string) => {
         if (isRedirecting) return;
         setIsRedirecting(true);
@@ -142,6 +137,19 @@ export const useAuth = ({
         }
     }, [token, loginUrl, mutate, handleRedirect]);
 
+    const resendEmailVerification = async ({ setStatus }: { setStatus: (status: string | null) => void }) => {
+        setStatus('loading');
+        
+        try {
+            await axios.post('/email/verification-notification');
+            setStatus('success');
+            return true;
+        } catch (error: any) {
+            console.error('Erreur lors de l\'envoi de l\'email de vérification:', error);
+            setStatus('error');
+            return false;
+        }
+    };
     // Logique de redirection
     useEffect(() => {
         if (typeof window === "undefined" || isLoading || isValidating) return;
@@ -209,14 +217,20 @@ export const useAuth = ({
         }
 
         try {
-            // Indication de chargement si nécessaire
-            setStatus("loading");
+            // Indication de chargement
+            setStatus("Connexion en cours...");
+
+            console.log('Envoi de la requête de connexion:', {
+                email: props.email,
+                password: '***********' // Ne jamais logger les vrais mots de passe
+            });
 
             const response = await axios.post("/login", props);
+            console.log('Réponse de la requête de connexion:', response.data);
 
             // Vérification détaillée de la réponse
             if (response.data && response.data.token) {
-                // Stockage du token (sans le stringifier - il est déjà sous forme de chaîne)
+                // Stockage du token sans JSON.stringify
                 if (typeof window !== "undefined") {
                     localStorage.setItem("token", response.data.token);
                 }
@@ -228,28 +242,37 @@ export const useAuth = ({
                 // Mise à jour des données utilisateur
                 await mutate();
 
-                // Feedback positif si nécessaire
-                setStatus("success");
+                // Feedback positif
+                setStatus("Connexion réussie");
 
-                // Redirection
-                const intendedUrl = getAndClearIntendedUrl();
-                handleRedirect(intendedUrl || defaultRedirect);
+                if (response.data.user && !response.data.user.email_verified_at) {
+                    handleRedirect('/verify-email');
+                    return true;
+                }
+
+                // Redirection après un court délai pour permettre de voir le message
+                setTimeout(() => {
+                    const intendedUrl = getAndClearIntendedUrl();
+                    handleRedirect(intendedUrl || defaultRedirect);
+                }, 2000);
+
                 return true;
             } else if (response.data && response.data.status === "success" && !response.data.token) {
-                // Cas où le login réussit mais sans token (rare, mais possible)
                 setError("Authentification réussie mais aucun token reçu");
                 setErrors({ message: ["Authentification réussie mais impossible de vous connecter. Contactez l'administrateur."] });
                 return false;
             } else {
-                // Réponse inattendue
                 throw new Error("Format de réponse inattendu du serveur");
             }
         } catch (error: any) {
+            console.error('Erreur lors de la connexion:', error);
+
             // Réinitialisation du statut de chargement
             setStatus(null);
 
             if (error.response) {
                 const { status, data } = error.response;
+                console.log(`Erreur de connexion (${status}):`, data);
 
                 // Erreurs de validation (formulaire)
                 if (status === 422) {
@@ -297,6 +320,7 @@ export const useAuth = ({
         }
     };
 
+
     const registerUser = async ({
                                     setErrors,
                                     ...props
@@ -306,7 +330,19 @@ export const useAuth = ({
         setErrors({});
 
         try {
-            const response = await axios.post("/register", props);
+            // Cela évite tout traitement particulier du token
+            const response = await axios({
+                method: 'post',
+                url: '/register',
+                data: props,
+                headers: {
+                    'X-API-KEY': 'HfJcYj7AGYPHqS9x5eRub5XRK9zJFpEthdBl5ShvyJyBEStJnsGTFmEFyInY76G7',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            console.log('Réponse de la requête d\'inscription:', response.data);
 
             if (response.data && response.data.token) {
                 if (typeof window !== "undefined") {
@@ -315,17 +351,20 @@ export const useAuth = ({
                 setToken(response.data.token);
                 await mutate();
 
-                const intendedUrl = getAndClearIntendedUrl();
-                handleRedirect(intendedUrl || defaultRedirect);
+                handleRedirect('/verify-email');
                 return true;
             } else {
-                throw new Error("Token non reçu du serveur");
+                if (response.status === 200 || response.status === 201) {
+                    return true;
+                }
+                throw new Error("Échec de l'inscription");
             }
         } catch (error: any) {
+            console.error('Erreur lors de l\'inscription:', error);
+
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors || {});
             } else if (error.response?.data?.message) {
-                // Gestion des messages d'erreur simples
                 setErrors({ message: [error.response.data.message] });
             } else {
                 setError("Une erreur inattendue s'est produite.");
@@ -340,6 +379,7 @@ export const useAuth = ({
         registerUser,
         token,
         user,
+        resendEmailVerification,
         logout,
         isLoading: isLoading || isValidating,
         error

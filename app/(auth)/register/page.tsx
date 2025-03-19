@@ -33,48 +33,89 @@ export default function RegisterPage() {
         setIsLoading(true)
         setErrors({})
 
+        // ID unique pour la notification de chargement
+        const loadingToastId = "register-loading"
+
         // Validations locales
         const validationErrors: { [key: string]: string[] } = {}
 
         if (!validateEmail(formData.email)) {
             validationErrors.email = ["L'email n'est pas valide"]
-            toast.error("L'email n'est pas valide", {
-                description: "Veuillez entrer une adresse email valide",
-                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-            })
         }
 
         if (formData.password !== formData.confirmPassword) {
             validationErrors.confirmPassword = ["Les mots de passe ne correspondent pas"]
-            toast.error("Les mots de passe ne correspondent pas", {
-                description: "Veuillez vous assurer que les deux mots de passe sont identiques",
-                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-            })
         }
 
         if (!formData.name || !formData.email || !formData.password) {
             validationErrors.general = ["Tous les champs sont obligatoires"]
-            toast.error("Formulaire incomplet", {
-                description: "Veuillez remplir tous les champs requis",
-                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-            })
         }
 
         if (formData.password.length < 6) {
             validationErrors.password = ["Le mot de passe doit contenir au moins 6 caractères"]
-            toast.error("Mot de passe trop court", {
-                description: "Le mot de passe doit contenir au moins 6 caractères",
-                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-            })
         }
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors)
             setIsLoading(false)
+
+            // Afficher les erreurs de validation avec des délais
+            setTimeout(() => {
+                if (validationErrors.email) {
+                    toast.error("L'email n'est pas valide", {
+                        description: "Veuillez entrer une adresse email valide",
+                        icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                        duration: 5000, // 5 secondes d'affichage
+                    })
+                }
+            }, 100)
+
+            setTimeout(() => {
+                if (validationErrors.confirmPassword) {
+                    toast.error("Les mots de passe ne correspondent pas", {
+                        description: "Veuillez vous assurer que les deux mots de passe sont identiques",
+                        icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                        duration: 5000,
+                    })
+                }
+            }, 300)
+
+            setTimeout(() => {
+                if (validationErrors.general) {
+                    toast.error("Formulaire incomplet", {
+                        description: "Veuillez remplir tous les champs requis",
+                        icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                        duration: 5000,
+                    })
+                }
+            }, 500)
+
+            setTimeout(() => {
+                if (validationErrors.password) {
+                    toast.error("Mot de passe trop court", {
+                        description: "Le mot de passe doit contenir au moins 6 caractères",
+                        icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                        duration: 5000,
+                    })
+                }
+            }, 700)
+
             return
         }
 
+        // Afficher la notification de chargement avec un délai plus long
+        toast.loading("Inscription en cours...", {
+            id: loadingToastId,
+            duration: 30000, // 30 secondes maximum (sera fermé avant si succès/erreur)
+        })
+
         try {
+            console.log("Tentative d'inscription avec:", {
+                name: formData.name,
+                email: formData.email,
+                password: "********" // Masquez toujours les mots de passe
+            })
+
             const userData: UserData = {
                 name: formData.name,
                 email: formData.email,
@@ -82,44 +123,96 @@ export default function RegisterPage() {
                 role: "user"
             }
 
-            await registerUser({
+            const result = await registerUser({
                 ...userData,
                 setErrors: (errors) => {
                     setErrors(errors)
-                    if (errors.name) {
-                        toast.error(errors.name[0])
-                    }
-                    if (errors.email) {
-                        toast.error(errors.email[0])
-                    }
-                    if (errors.password) {
-                        toast.error(errors.password[0])
-                    }
-                    if (errors.message) {
-                        toast.error(errors.message[0])
-                    }
+
+                    // Fermer la notification de chargement
+                    toast.dismiss(loadingToastId)
+
+                    // Afficher les erreurs avec toast et délais
+                    setTimeout(() => {
+                        if (errors.name) {
+                            toast.error(errors.name[0], {
+                                duration: 5000,
+                                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                            })
+                        }
+                    }, 100)
+
+                    setTimeout(() => {
+                        if (errors.email) {
+                            toast.error(errors.email[0], {
+                                duration: 5000,
+                                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                            })
+                        }
+                    }, 300)
+
+                    setTimeout(() => {
+                        if (errors.password) {
+                            toast.error(errors.password[0], {
+                                duration: 5000,
+                                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                            })
+                        }
+                    }, 500)
+
+                    setTimeout(() => {
+                        if (errors.message) {
+                            toast.error(errors.message[0], {
+                                duration: 5000,
+                                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                            })
+                        }
+                    }, 700)
                 },
             })
 
-            // Message de succès
-            toast.success("Inscription réussie", {
-                description: "Votre compte a été créé avec succès",
-                icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-            })
-            // Redirection vers la page de connexion
-            router.push("/login")
+
+            // Si l'inscription a réussi
+            if (result) {
+                // Fermer la notification de chargement
+                toast.dismiss(loadingToastId)
+
+                // Petit délai avant d'afficher le succès
+                setTimeout(() => {
+                    // Message de succès
+                    toast.success("Inscription réussie", {
+                        description: "Votre compte a été créé avec succès",
+                        icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+                        duration: 5000,
+                    })
+
+                    // Redirection vers la page de connexion après un court délai
+                    setTimeout(() => {
+                        router.push("/verify-email")
+                    }, 2000)
+                }, 300)
+            }
 
         } catch (error) {
-            toast.error("Erreur d'inscription", {
-                description: "Une erreur est survenue. Veuillez réessayer plus tard.",
-            })
+            console.error("Erreur d'inscription:", error)
+
+            // Fermer la notification de chargement
+            toast.dismiss(loadingToastId)
+
+            // Afficher l'erreur après un court délai
+            setTimeout(() => {
+                toast.error("Erreur d'inscription", {
+                    description: "Une erreur est survenue. Veuillez réessayer plus tard.",
+                    duration: 5000,
+                    icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                })
+            }, 300)
         } finally {
             setIsLoading(false)
         }
     }
 
     return (
-        <div className="container my-28 mx-auto py-10 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-150px)] flex items-center justify-center">
+        <div className="container my-16 mx-auto py-10 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-150px)] flex items-center justify-center">
             <Card className="w-full max-w-5xl overflow-hidden shadow-lg border-0">
                 <div className="flex flex-col md:flex-row">
                     {/* Section image à gauche */}
@@ -299,7 +392,14 @@ export default function RegisterPage() {
                 </div>
             </Card>
 
-            <Toaster position="top-right" richColors expand={false} />
+            <Toaster
+                position="top-right"
+                richColors
+                expand={false}
+                closeButton={true}
+                visibleToasts={3}
+                theme="light"
+            />
         </div>
     )
 }

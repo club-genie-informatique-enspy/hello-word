@@ -1,9 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { redirect, usePathname } from "next/navigation";
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/auth';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 export const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,9 +27,40 @@ export const Navbar = () => {
         }
     }, [user, isLoading]);
 
+    // Fonction pour rediriger vers la page de connexion
     const handleSignIn = () => {
         redirect('/login');
-    }
+    };
+
+    // Fonction pour gérer la déconnexion
+    const handleLogout = async () => {
+        await logout();
+        redirect('/');
+    };
+
+    // Fonction pour générer les initiales de l'utilisateur
+    const getUserInitials = () => {
+        if (!user || !user.name) return '?';
+        const nameParts = user.name.split(' ');
+        if (nameParts.length === 1) return nameParts[0].charAt(0).toUpperCase();
+        return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+    };
+
+    // Fonction pour obtenir une couleur de fond basée sur le nom d'utilisateur
+    const getAvatarBgColor = () => {
+        if (!user || !user.name) return 'bg-gray-400';
+
+        // Liste de couleurs pour les avatars
+        const colors = [
+            'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+            'bg-pink-500', 'bg-indigo-500', 'bg-yellow-500',
+            'bg-red-500', 'bg-teal-500'
+        ];
+
+        // Utiliser la somme des codes de caractères du nom pour sélectionner une couleur
+        const charSum = user.name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        return colors[charSum % colors.length];
+    };
 
     // Fonction pour déterminer si un lien est actif
     const isLinkActive = (path: string) => {
@@ -75,13 +113,42 @@ export const Navbar = () => {
                             À propos
                         </Link>
 
-                        {/* Toujours afficher le bouton Sign in, même si l'utilisateur est connecté */}
-                        <button
-                            onClick={handleSignIn}
-                            className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
-                        >
-                            Sign in
-                        </button>
+                        {/* Afficher l'avatar ou le bouton de connexion selon l'état d'authentification */}
+                        {isLoading ? (
+                            // État de chargement
+                            <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+                        ) : user ? (
+                            // Utilisateur connecté - Afficher l'avatar avec menu déroulant
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="focus:outline-none">
+                                    <div className={`w-10 h-10 ${getAvatarBgColor()} rounded-full flex items-center justify-center text-white font-medium cursor-pointer`}>
+                                        {getUserInitials()}
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56">
+                                    <div className="p-2 text-sm font-medium text-gray-700">
+                                        Bonjour, {user.name}
+                                    </div>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => redirect('/v2/profile')} className="cursor-pointer">
+                                        <User className="mr-2 h-4 w-4" />
+                                        <span>Profil</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 hover:text-red-600">
+                                        <LogOut className="mr-2 h-4 w-4" />
+                                        <span>Déconnexion</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            // Utilisateur non connecté - Afficher le bouton de connexion
+                            <button
+                                onClick={handleSignIn}
+                                className="bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
+                            >
+                                Se connecter
+                            </button>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -101,6 +168,21 @@ export const Navbar = () => {
                 {isMobileMenuOpen && (
                     <div className="md:hidden bg-white py-4 border-t">
                         <div className="flex flex-col space-y-4 px-4">
+                            {/* Si l'utilisateur est connecté, afficher ses informations en haut du menu mobile */}
+                            {!isLoading && user && (
+                                <Link href="/v2/profile">
+                                    <div className="flex items-center space-x-3 py-3 border-b">
+                                        <div className={`w-10 h-10 ${getAvatarBgColor()} rounded-full flex items-center justify-center text-white font-medium`}>
+                                            {getUserInitials()}
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-medium">{user.name}</div>
+                                            <div className="text-sm text-gray-500">{user.email}</div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            )}
+
                             <Link
                                 href="/"
                                 className={`py-2 transition-colors ${isLinkActive('/') ? activeLinkClass : normalLinkClass}`}
@@ -129,21 +211,24 @@ export const Navbar = () => {
                             >
                                 À propos
                             </Link>
-                            <Link
-                                href="/v2/contact"
-                                className={`py-2 transition-colors ${isLinkActive('/v2/contact') ? activeLinkClass : normalLinkClass}`}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                Contact
-                            </Link>
 
-                            {/* Toujours afficher le bouton Sign in dans le menu mobile */}
-                            <button
-                                onClick={handleSignIn}
-                                className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
-                            >
-                                Sign in
-                            </button>
+                            {/* Bouton de connexion ou déconnexion selon l'état d'authentification */}
+                            {!isLoading && user ? (
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center justify-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                    <span>Déconnexion</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSignIn}
+                                    className="w-full bg-[#FF9100] text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors"
+                                >
+                                    Se connecter
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
