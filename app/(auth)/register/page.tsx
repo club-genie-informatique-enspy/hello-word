@@ -170,7 +170,6 @@ export default function RegisterPage() {
                 },
             })
 
-            console.log("Résultat de l'inscription:", result)
 
             // Si l'inscription a réussi
             if (result) {
@@ -188,7 +187,7 @@ export default function RegisterPage() {
 
                     // Redirection vers la page de connexion après un court délai
                     setTimeout(() => {
-                        router.push("/login")
+                        router.push("/verify-email")
                     }, 2000)
                 }, 300)
             }

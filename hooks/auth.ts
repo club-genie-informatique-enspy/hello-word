@@ -33,7 +33,7 @@ interface User {
     name: string;
     email: string;
     role: string;
-    // ajoutez d'autres propriétés selon votre modèle utilisateur
+    email_verified_at?: string | null;
 }
 
 export const useAuth = ({
@@ -97,7 +97,6 @@ export const useAuth = ({
             errorRetryCount: 2
         }
     );
-
     const handleRedirect = useCallback((path: string) => {
         if (isRedirecting) return;
         setIsRedirecting(true);
@@ -138,6 +137,19 @@ export const useAuth = ({
         }
     }, [token, loginUrl, mutate, handleRedirect]);
 
+    const resendEmailVerification = async ({ setStatus }: { setStatus: (status: string | null) => void }) => {
+        setStatus('loading');
+        
+        try {
+            await axios.post('/email/verification-notification');
+            setStatus('success');
+            return true;
+        } catch (error: any) {
+            console.error('Erreur lors de l\'envoi de l\'email de vérification:', error);
+            setStatus('error');
+            return false;
+        }
+    };
     // Logique de redirection
     useEffect(() => {
         if (typeof window === "undefined" || isLoading || isValidating) return;
@@ -233,11 +245,16 @@ export const useAuth = ({
                 // Feedback positif
                 setStatus("Connexion réussie");
 
+                if (response.data.user && !response.data.user.email_verified_at) {
+                    handleRedirect('/verify-email');
+                    return true;
+                }
+
                 // Redirection après un court délai pour permettre de voir le message
                 setTimeout(() => {
                     const intendedUrl = getAndClearIntendedUrl();
                     handleRedirect(intendedUrl || defaultRedirect);
-                }, 1000);
+                }, 2000);
 
                 return true;
             } else if (response.data && response.data.status === "success" && !response.data.token) {
@@ -313,13 +330,6 @@ export const useAuth = ({
         setErrors({});
 
         try {
-            console.log('Envoi de la requête d\'inscription:', {
-                name: props.name,
-                email: props.email,
-                password: '***********',
-                role: props.role
-            });
-
             // Cela évite tout traitement particulier du token
             const response = await axios({
                 method: 'post',
@@ -334,14 +344,16 @@ export const useAuth = ({
 
             console.log('Réponse de la requête d\'inscription:', response.data);
 
-            // Avec l'approche séparée, on ne s'attend pas à recevoir de token lors de l'inscription
-            // On vérifie simplement que l'inscription a réussi
-            if (response.status === 200 || response.status === 201 ||
-                (response.data && (response.data.status === "success" || response.data.success === true))) {
-                // Inscription réussie, mais pas de connexion automatique
+            if (response.data && response.data.token) {
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("token", response.data.token);
+                }
+                setToken(response.data.token);
+                await mutate();
+
+                handleRedirect('/verify-email');
                 return true;
             } else {
-                // Si la réponse est 200/201 mais qu'on ne peut pas confirmer le succès
                 if (response.status === 200 || response.status === 201) {
                     return true;
                 }
@@ -367,6 +379,7 @@ export const useAuth = ({
         registerUser,
         token,
         user,
+        resendEmailVerification,
         logout,
         isLoading: isLoading || isValidating,
         error
