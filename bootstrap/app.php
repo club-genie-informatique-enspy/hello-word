@@ -18,7 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
          $middleware->alias([
              'role' => RoleMiddleware::class,
-             'api-key'=> App\Http\Middleware\VerifyApiKey::class
+             'api-key'=> App\Http\Middleware\VerifyApiKey::class,
+             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             '*'

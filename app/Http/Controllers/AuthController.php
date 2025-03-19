@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -24,9 +25,9 @@ class AuthController extends Controller
     try {
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email',  // Retrait de unique:users car déjà vérifié
+            'email' => 'required|string|email',
             'password' => 'required|string|min:6',
-            'role' => 'required|string|in:user,admin',
+            'role' => 'string|in:user,admin',
         ], [
             'email.email' => 'L\'adresse email n\'est pas valide.',
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
@@ -36,8 +37,11 @@ class AuthController extends Controller
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
-            'role' => $validatedData['role'],
+            'role' => $request->role ?? 'user',
         ]);
+
+//        event(new Registered($user));
+        $user->sendEmailVerificationNotification();
 
         return response()->json([
             'user' => [
@@ -45,6 +49,7 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => $user->role,
+                'email_verified' => $user->hasVerifiedEmail(),
             ],
             'token' => $user->createToken('auth_token')->plainTextToken,
         ], 201);
@@ -85,8 +90,11 @@ public function login(Request $request)
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->role,
+            'email_verified' => $user->hasVerifiedEmail()
+
         ],
         'token' => $user->createToken('auth_token')->plainTextToken,
+        'email_verified' => $user->hasVerifiedEmail()
     ]);
 }
 
@@ -98,9 +106,58 @@ public function login(Request $request)
         return response()->json(['message' => 'Logged out']);
     }
 
-    // Profil utilisateur
+    // Récupérer le profil de l'utilisateur
     public function profile(Request $request)
     {
         return response()->json($request->user());
+    }
+    public function generateVerificationUrl(Request $request)
+    {
+        $user = $request->user();
+
+        // Générer une URL de vérification signée
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+                'redirect_to' => config('app.frontend_url').'/email-verified' // URL de redirection côté frontend
+            ]
+        );
+
+        return response()->json(['verification_url' => $verificationUrl]);
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        if (!hash_equals((string) $request->hash, sha1($user->email))) {
+            return response()->json(['message' => 'Lien invalide'], 403);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            // L'email est déjà vérifié, rediriger vers le frontend
+            return redirect()->away($request->redirect_to ?? config('app.frontend_url'));
+        }
+
+        $user->markEmailAsVerified();
+
+        // Rediriger vers le frontend avec succès
+        return redirect()->away($request->redirect_to ?? config('app.frontend_url'));
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email déjà vérifié'], 400);
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return response()->json(['message' => 'Lien de vérification envoyé']);
     }
 }

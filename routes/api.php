@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentaireController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\ClicherController;
 
 
 
-Route::middleware('api-key')->group(function () {
+//Route::middleware('api-key')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
@@ -69,7 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/activity/{uuid}/toogle-like', [ActivityController::class, 'toggleLike']);
     Route::post('/message/{uuid}/toogle-like', [MessageController::class, 'toggleLike']);
     Route::post('/article/{uuid}/toogle-like', [ArticleController::class, 'toggleLike']);
-   
+
 });
 
 Route::middleware('auth:sanctum', 'role:admin')->group(function () {
@@ -117,7 +118,27 @@ Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->
 
 // Ajouter un like
 Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
- 
+
 Route::get('/clichers', [ClicherController::class, 'index']);
 
-});
+//});
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return response()->json(['message' => 'Verification link sent']);
+})->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = \App\Models\User::findOrFail($id);
+
+    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        return response()->json(['message' => 'Invalid verification link'], 403);
+    }
+
+    if ($user->hasVerifiedEmail()) {
+        return response()->json(['message' => 'Email already verified']);
+    }
+
+    $user->markEmailAsVerified();
+
+    return response()->json(['message' => 'Email successfully verified']);
+})->middleware(['signed'])->name('verification.verify');

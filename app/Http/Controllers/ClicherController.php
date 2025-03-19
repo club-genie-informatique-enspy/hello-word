@@ -17,7 +17,7 @@ class ClicherController extends Controller
         $clicher = Clicher::with('comments')->findOrFail($id);
         return response()->json($clicher);
     }
-    
+
     // Enregistrer un nouveau cliché
     public function store(Request $request)
     {
@@ -69,7 +69,6 @@ class ClicherController extends Controller
         return response()->json(['message' => 'Like ajouté avec succès !', 'likes_count' => $clicher->likes_count]);
     }
 
-    // Récupérer tous les clichés
     public function index()
     {
         $clichers = Clicher::all();

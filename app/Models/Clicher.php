@@ -18,7 +18,6 @@ class Clicher extends Model
         'likes_count',
     ];
 
-    // Relation avec les commentaires
     public function comments()
     {
         return $this->hasMany(Comment::class);
