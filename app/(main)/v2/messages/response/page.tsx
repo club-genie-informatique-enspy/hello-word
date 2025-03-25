@@ -3,7 +3,7 @@
 import { ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getMessages } from '@/app/lib/article';
+import { getMessages } from '@/app/(main)/lib/article';
 import toggleLike from '@/hooks/messages';
 import { MessageCard } from '@/components/v2/messages/card/message-card';
 import { Pagination } from '@/components/v2/messages/pagination/pagination';
