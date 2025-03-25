@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CommentaireController;
-use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ClicherController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\ArticleControllerv2;
-use App\Http\Controllers\ClicherController;
+use App\Http\Controllers\CommentaireController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\VerificationController;
 
 
 
@@ -106,19 +107,21 @@ Route::delete('articles/{uuid}', [ArticleControllerv2::class, 'destroy']);
 Route::get('/articles/my', [ArticleControllerv2::class, 'myArticles']);
 Route::resource('articles', ArticleControllerv2::class);
 
+// Routes spécifiques pour l'upload d'images
+Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
+Route::post('/upload-base64-image', [ImageUploadController::class, 'uploadBase64Image']);
+
 Route::get('/articles', [ArticleControllerv2::class, 'index']);
 Route::get('/articles/{article}', [ArticleControllerv2::class, 'show']);
 // Ajoutez cette route dans routes/api.php
 Route::get('test-storage', [ArticleControllerv2::class, 'testStorage']);
 // Afficher un cliché
 Route::get('/clicher/{id}', [ClicherController::class, 'show'])->name('clicher.show');
-
 // Ajouter un commentaire
 Route::post('/clicher/{id}/comment', [ClicherController::class, 'addComment'])->name('clicher.addComment');
 
 // Ajouter un like
 Route::post('/clicher/{id}/like', [ClicherController::class, 'like'])->name('clicher.like');
-
 Route::get('/clichers', [ClicherController::class, 'index']);
 
 //});
